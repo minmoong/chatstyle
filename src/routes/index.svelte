@@ -1,2 +1,9 @@
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
+<!-- <script context="module" lang="ts">
+  서버사이드 렌더링은 onMount 대신 이것을 사용할 것
+</script> -->
+
+<script lang="ts">
+  import Chat from 'src/components/Chat.svelte';
+</script>
+
+<Chat />

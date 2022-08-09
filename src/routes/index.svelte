@@ -14,8 +14,8 @@
     timezone: string;
   }
 
-  export const load: Load = async ({ fetch }) => {
-    const location: Location = await getLocationInfo({ fetch });
+  export const load: Load = async () => {
+    const location: Location = await getLocationInfo();
     return {
       props: { location }
     };
@@ -25,6 +25,8 @@
 <script lang="ts">
   import Chat from 'src/components/Chat.svelte';
   export let location: Location;
+
+  console.log(location);
 </script>
 
 <div>{JSON.stringify(location)}</div>

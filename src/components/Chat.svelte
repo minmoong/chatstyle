@@ -16,33 +16,6 @@
   }
 </script>
 
-<!-- <form
-  on:submit|preventDefault={onSubmit}
-  class="chat">
-  <div class="chat-title">
-  </div>
-  <div class="messages">
-  </div>
-  <div class="chat-input">
-    <div use:Ripple={{ surface: true }}>
-      <input
-        type="text"
-        placeholder="Message"
-        bind:value
-      />
-    </div>
-    <span use:Ripple={{ surface: true }}>
-      <button>
-        {#if value === ''}
-          <Icon name="send-outlined" width="23" height="23" />
-          {:else}
-            <Icon name="send-filled" width="23" height="23" />
-        {/if}
-      </button>
-    </span>
-  </div>
-</form> -->
-
 <form on:submit|preventDefault={onSubmit} class="chat">
   <div class="chat-title">
     <h1>민뭉</h1>

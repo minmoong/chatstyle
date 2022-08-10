@@ -29,5 +29,4 @@
   console.log(location);
 </script>
 
-<div>{JSON.stringify(location)}</div>
 <Chat />

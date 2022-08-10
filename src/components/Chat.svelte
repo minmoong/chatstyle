@@ -1,17 +1,15 @@
 <script lang="ts">
   import Ripple from '@smui/ripple';
   import Icon from 'src/util/Icon.svelte';
+  import getNewWord from 'src/functions/getNewWord';
 
   let value = '';
 
-  function getAnswer(question: string) {
-    // NLP Model Here ...
-  }
-
-  function onSubmit() {
+  async function onSubmit() {
     if (value === '') return;
 
-    console.log(value);
+    const res = await getNewWord(value);
+
     value = '';
   }
 </script>
@@ -19,7 +17,7 @@
 <form on:submit|preventDefault={onSubmit} class="chat">
   <div class="chat-title">
     <h1>민뭉</h1>
-    <h2>당신의 AI 아바타</h2>
+    <h2>당신의 끝말잇기 아바타</h2>
     <figure class="avatar">
       <Icon name="robot" class="avatar-icon" width="80px" height="80px" />
     </figure>

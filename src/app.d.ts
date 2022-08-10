@@ -8,4 +8,6 @@ declare namespace App {
 	// interface PublicEnv {}
 	// interface Session {}
 	// interface Stuff {}
+
+	declare var something: string = 'asdf';
 }

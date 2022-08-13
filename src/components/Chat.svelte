@@ -2,15 +2,40 @@
   import Ripple from '@smui/ripple';
   import Icon from 'src/util/Icon.svelte';
   import getNewWord from 'src/functions/getNewWord';
+  import { afterUpdate } from 'svelte';
+
+  afterUpdate(() => {
+    messagesElement.scrollTo(0, messagesElement.scrollHeight); // TODO: 바운스 애니메이션 넣기; updateScroll 함수 만들고 메시지 추가될 때 마다 이걸 실행하는 걸로
+  });
 
   let value = '';
+  let messages: { id: string; type: string; content: string }[] = [];
+  let messagesElement: HTMLDivElement;
+
+  function sendMsg(msg: string, id: string) {
+    messages = [...messages, { id, type: 'SEND', content: msg }];
+  }
+
+  function receiveMsg(msg: string, id: string) {
+    messages = [...messages, { id, type: 'RECEIVE', content: msg }];
+  }
 
   async function onSubmit() {
     if (value === '') return;
-
-    const res = await getNewWord(value);
-
+    let word = value;
     value = '';
+
+    let sendID = (Math.random() + 1).toString(36).substring(7);
+    let receiveID = (Math.random() + 1).toString(36).substring(7);
+    sendMsg(word, sendID);
+
+
+    receiveMsg('· · ·', receiveID);
+    const res = await getNewWord(word);
+    messages = messages.map(message => {
+      if (message.id === receiveID) message.content = res;
+      return message;
+    });
   }
 </script>
 
@@ -19,16 +44,31 @@
     <h1>민뭉</h1>
     <h2>당신의 끝말잇기 아바타</h2>
     <figure class="avatar">
-      <Icon name="robot" class="avatar-icon" width="80px" height="80px" />
+      <Icon name="robot" class="avatar-icon" width="60px" height="60px" />
     </figure>
   </div>
-  <div class="messages">
-    <div class="messages-content"></div>
+  <div class="messages" bind:this={messagesElement}>
+    <div class="messages-content">
+      {#each messages as message}
+        {#if message.type === 'SEND'}
+          <div class="message message-personal">
+            {message.content}
+          </div>
+          {:else if message.type === 'RECEIVE'}
+          <div class="message">
+            <figure class="avatar">
+              <Icon name="robot" class="avatar-icon" width="25px" height="25px" />
+            </figure>
+            {message.content}
+          </div>
+        {/if}
+      {/each}
+    </div>
   </div>
   <div class="message-box">
     <input
       type="text"
-      placeholder="메시지 보내기..."
+      placeholder="보내기..."
       bind:value
     />
     <span use:Ripple={{ surface: true }}>
@@ -63,8 +103,9 @@
     width: 100%;
     border-bottom: 1px solid #ccc;
     color: $text-secondary-color;
-    padding: 60px 0 5px;
+    padding: 50px 0 5px;
     text-align: center;
+    margin-bottom: 20px;
 
     h1,
     h2 {
@@ -83,11 +124,11 @@
       @include flex-center;
       position: absolute;
       left: 0;
-      top: -50px;
+      top: -40px;
       right: 0;
       margin: auto;
-      width: 100px;
-      height: 100px;
+      width: 80px;
+      height: 80px;
       border-radius: 50%;
       border: 2px solid $primary-color-default;
       background: #fff;
@@ -96,18 +137,65 @@
 
   .messages {
     flex: 1 1 auto;
+    overflow-y: scroll;
+    overflow-x: hidden;
+
+    .messages-content {
+      padding-left: 15px;
+      width: 100%;
+      height: 100%;
+
+      .message {
+        position: relative;
+        z-index: 3;
+        max-width: 310px;
+        word-break: break-word;
+        clear: both;
+        float: left;
+        padding: 6px 10px 7px;
+        border-radius: 0 10px 10px 10px;
+        background: $background-color-primary;
+        margin: 8px 0;
+        font-size: 15px;
+        line-height: 1.4;
+        margin-left: 40px;
+        color: $text-primary-color;
+
+        .avatar {
+          @include flex-center;
+          position: absolute;
+          top: 0;
+          left: -40px;
+          width: 35px;
+          height: 35px;
+          border-radius: 50%;
+          border: 1px solid $primary-color-default;
+        }
+      }
+
+      .message-personal {
+        float: right;
+        text-align: right;
+        border-radius: 10px 10px 0 10px;
+        background: $primary-color-default;
+        color: $text-color-white;
+        margin: 2px 0;
+      }
+    }
   }
 
   .message-box {
     flex: 0 1 45px;
     width: 90%;
-    margin: 0 auto;
-    padding: 10px 0px 10px 15px;
+    margin: 15px auto;
+    padding: 8px 0 8px 15px;
     position: relative;
     height: 14px;
     border: 1px solid #ccc;
-    border-radius: 20px;
-    bottom: 15px;
+    border-radius: 40px;
+    height: 100%;
+    display: flex;
+    align-items: center;
 
     input {
       background: none;
@@ -115,8 +203,7 @@
       outline: none;
       font-size: 15px;
       height: 24px;
-      padding-right: 20px;
-      width: 265px;
+      width: 280px;
       color: $text-primary-color;
     }
 

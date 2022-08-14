@@ -1,14 +1,11 @@
-// https://opendict.korean.go.kr/api/search?key=FEB11DA38C9CD89ADF39487FB8CE68EA&req_type=json&q=%EB%82%98&advanced=y&type1=word&sort=popular&method=start
-
 import { api } from 'src/api';
 
 async function getNewWord(word: string) {
-  const res = await api<'isExistWord'>('GET', `/api/isExistWord/${word}.json`);
-  if (!res.existWord) {
-    return '존재하지 않는 단어입니다.';
-  }
+  const { existWord } = await api<'isExistWord'>('GET', `/api/isExistWord/${word}.json`);
+  if (!existWord) return '존재하지 않는 단어입니다.';
 
-  return '존재하는 단어입니다.';
+  const { newWord } = await api<'getNewWord'>('GET', `/api/getNewWord/${word[word.length - 1]}.json`);
+  return newWord;
 }
 
 export default getNewWord;

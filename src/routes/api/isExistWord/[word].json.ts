@@ -13,11 +13,13 @@ export const GET: RequestHandler = async ({ params }) => {
     const res = await axios.get(wordExistReqURL, { httpsAgent });
     if (res.data.channel.item.length > 0) {
       return {
+        status: 200,
         body: { existWord: true }
       };
     }
 
     return {
+      status: 200,
       body: { existWord: false }
     };
   } catch (error) {

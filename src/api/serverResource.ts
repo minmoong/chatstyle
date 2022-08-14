@@ -6,5 +6,13 @@ export interface APIResource {
     res: {
       existWord: boolean;
     };
+  };
+  getNewWord: {
+    method: 'GET';
+    endpoint: string;
+    req: {};
+    res: {
+      newWord: string;
+    };
   }
 }

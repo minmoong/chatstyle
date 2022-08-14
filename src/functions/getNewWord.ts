@@ -1,3 +1,5 @@
+// Changed
+
 import { api } from 'src/api';
 
 async function getNewWord(word: string) {

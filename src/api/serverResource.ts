@@ -1,3 +1,5 @@
+// Changed
+
 export interface APIResource {
   isExistWord: {
     method: 'GET';

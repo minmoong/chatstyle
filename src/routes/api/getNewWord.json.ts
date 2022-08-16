@@ -23,7 +23,7 @@ export const POST: RequestHandler = async ({ request }) => {
         status: 200,
         body: {
           found: false,
-          message: '당신이 이겼습니다! 1,000 포인트를 지급합니다!' // TODO: 이거 가끔식 나타내면 어떨까
+          message: '당신이 이겼습니다! 1,000 포인트를 지급합니다!'
         }
       };
     }
@@ -33,7 +33,7 @@ export const POST: RequestHandler = async ({ request }) => {
       body: {
         found: true,
         newWord: item[0].word,
-        definition: item[0].sense[0].definition // TODO: res.data.channel.item[1] 정렬하기
+        definition: item[0].sense[0].definition
       }
     };
   } catch (error) {

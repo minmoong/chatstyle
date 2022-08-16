@@ -1,35 +1,44 @@
 <script lang="ts">
-  import Ripple from '@smui/ripple';
-  import Icon from 'src/util/Icon.svelte';
-  import getNewWord from 'src/functions/getNewWord';
-  import { afterUpdate, onMount } from 'svelte';
-  import getStartWord from 'src/functions/getStartWord';
+  import { onMount } from 'svelte';
   import { usedWords } from 'src/store';
+  import getNewWord from 'src/functions/getNewWord';
+  import getStartWord from 'src/functions/getStartWord';
+  import Ripple from '@smui/ripple';
+  import Icons from './Icons.svelte';
+
+  type message = {
+    id: string;
+    type: string;
+    content: string;
+    definition?: string;
+    loading?: boolean;
+  }
 
   let value = '';
-  let messages: { id: string; type: string; content: string; definition?: string }[] = [];
+  let messages: message[] = [];
   let messagesElement: HTMLDivElement;
-  let sendWord: string;
+  let sendWord: string = '';
 
   let receiveID = getRandomID();
-  receiveMsg('· · ·', receiveID);
+  receiveMsg('', receiveID, undefined, true);
 
   onMount(async () => {
     const { startWord, definition } = await getStartWord();
     sendWord = startWord;
-    changeMessages(receiveID, startWord, definition);
+    changeMessages(receiveID, startWord, definition, false);
     usedWords.update(usedWords => usedWords.concat(startWord));
   });
 
-  afterUpdate(() => {
-    messagesElement.scrollTo(0, messagesElement.scrollHeight); // TODO: 바운스 애니메이션 넣기; updateScroll 함수 만들고 메시지 추가될 때 마다 이걸 실행하는 걸로
-  });
+  function updateScroll() {
+    messagesElement?.scrollTo(0, messagesElement.scrollHeight);
+  }
 
-  function changeMessages(id: string, content: string, definition?: string) {
+  function changeMessages(id: string, content: string, definition?: string, loading?: boolean) {
     messages = messages.map(message => {
       if (message.id === id) {
         message.content = content;
         message.definition = definition;
+        message.loading = loading;
       }
       return message;
     });
@@ -43,8 +52,10 @@
     messages = [...messages, { id, type: 'SEND', content: msg }];
   }
 
-  function receiveMsg(msg: string, id: string, definition?: string) {
-    messages = [...messages, { id, type: 'RECEIVE', content: msg, definition }];
+  function receiveMsg(msg: string, id: string, definition?: string, loading?: boolean) {
+    messages = [...messages, { id, type: 'RECEIVE', content: msg, definition, loading }];
+    const spreadScroll = setInterval(updateScroll, 100);
+    setTimeout(() => clearInterval(spreadScroll), 1000);
   }
 
   async function onSubmit() {
@@ -55,36 +66,36 @@
     let sendID = getRandomID();
     let receiveID = getRandomID();
     sendMsg(word, sendID);
-    receiveMsg('· · ·', receiveID);
+    receiveMsg('', receiveID, undefined, true);
 
     const res = await getNewWord(sendWord, word);
     if (res.success) sendWord = res.message;
-    changeMessages(receiveID, res.message, res.definition);
+    changeMessages(receiveID, res.message, res.definition, false);
   }
 </script>
 
-{$usedWords}
 <form on:submit|preventDefault={onSubmit} class="chat">
   <div class="chat-title">
     <h1>민뭉</h1>
     <h2>당신의 끝말잇기 아바타</h2>
     <figure class="avatar">
-      <Icon name="robot" class="avatar-icon" width="60px" height="60px" />
+      <Icons name="robot" class="avatar-icon" width="60px" height="60px" />
     </figure>
   </div>
   <div class="messages" bind:this={messagesElement}>
     <div class="messages-content">
-      {#each messages as { type, content, definition }}
+      {#each messages as { type, content, definition, loading }}
         {#if type === 'SEND'}
           <div class="message message-personal">
             {content}
           </div>
           {:else if type === 'RECEIVE'}
-          <div class="message" title={definition ? definition : ''}>
+          <div class="message" class:loading title={definition ? definition : ''}>
             <figure class="avatar">
-              <Icon name="robot" class="avatar-icon" width="25px" height="25px" />
+              <Icons name="robot" class="avatar-icon" width="25px" height="25px" />
             </figure>
             {content}
+            <span></span>
           </div>
         {/if}
       {/each}
@@ -99,9 +110,9 @@
     <span use:Ripple={{ surface: true }}>
       <button>
         {#if value === ''}
-          <Icon name="send-outlined" width="23" height="23" />
+          <Icons name="send-outlined" width="23" height="23" />
           {:else}
-            <Icon name="send-filled" width="23" height="23" />
+            <Icons name="send-filled" width="23" height="23" />
         {/if}
       </button>
     </span>
@@ -166,7 +177,7 @@
     overflow-x: hidden;
 
     .messages-content {
-      padding-left: 15px;
+      padding: 0 15px;
       width: 100%;
       height: 100%;
 
@@ -185,6 +196,38 @@
         line-height: 1.4;
         margin-left: 40px;
         color: $text-primary-color;
+        transform: scale(0);
+        transform-origin: 0 0;
+        animation: bounce 500ms linear both;
+
+        &.loading {
+          width: 50px;
+          height: 30px;
+          &::before {
+            @include ball;
+            border: none;
+            animation-delay: .15s;
+          }
+
+          & span {
+            display: block;
+            font-size: 0;
+            width: 30px;
+            height: 20px;
+            position: relative;
+
+            &::before {
+              @include ball;
+              margin-left: -8px;
+            }
+
+            &::after {
+              @include ball;
+              margin-left: 8px;
+              animation-delay: .3s;
+            }
+          }
+        }
 
         .avatar {
           @include flex-center;

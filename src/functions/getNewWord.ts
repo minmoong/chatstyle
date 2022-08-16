@@ -25,7 +25,6 @@ async function getNewWord(endWord: string, word: string) {
       message: '중복된 단어입니다. 😊'
     };
   }
-  usedWords.update(usedWords => usedWords.concat(word));
 
   const { existWord } = await api<'isExistWord'>('GET', `/api/isExistWord/${word}.json`);
   if (!existWord) {
@@ -34,6 +33,8 @@ async function getNewWord(endWord: string, word: string) {
       message: '존재하지 않는 단어입니다. 😥'
     };
   }
+  
+  usedWords.update(usedWords => usedWords.concat(word));
 
   let { newWord, definition } = await api<'getNewWord'>('POST', `/api/getNewWord.json`, {
     endWith: word[word.length - 1],

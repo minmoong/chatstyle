@@ -2,20 +2,8 @@
   import type { Load } from '@sveltejs/kit';
   import getLocationInfo from 'src/functions/getLocationInfo';
 
-  type Location = {
-    city: string;
-    country: string;
-    hostname: string;
-    ip: string;
-    loc: string;
-    org: string;
-    postal: string;
-    region: string;
-    timezone: string;
-  }
-
   export const load: Load = async () => {
-    const location: Location = await getLocationInfo();
+    const location = await getLocationInfo();
     return {
       props: { location }
     };
@@ -24,7 +12,7 @@
 
 <script lang="ts">
   import Chat from 'src/components/Chat.svelte';
-  export let location: Location;
+  export let location;
 
   console.log(location);
 </script>

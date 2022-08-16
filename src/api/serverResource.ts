@@ -8,11 +8,24 @@ export interface APIResource {
     };
   };
   getNewWord: {
+    method: 'POST';
+    endpoint: string;
+    req: {
+      endWith: string;
+      usedWords: string[];
+    };
+    res: {
+      newWord: string;
+      definition: string;
+    };
+  };
+  getStartWord: {
     method: 'GET';
     endpoint: string;
     req: {};
     res: {
-      newWord: string;
-    };
-  }
+      startWord: string;
+      definition: string;
+    }
+  };
 }

@@ -2,22 +2,49 @@
   import Ripple from '@smui/ripple';
   import Icon from 'src/util/Icon.svelte';
   import getNewWord from 'src/functions/getNewWord';
-  import { afterUpdate } from 'svelte';
+  import { afterUpdate, onMount } from 'svelte';
+  import getStartWord from 'src/functions/getStartWord';
+  import { usedWords } from 'src/store';
+
+  let value = '';
+  let messages: { id: string; type: string; content: string; definition?: string }[] = [];
+  let messagesElement: HTMLDivElement;
+  let sendWord: string;
+
+  let receiveID = getRandomID();
+  receiveMsg('· · ·', receiveID);
+
+  onMount(async () => {
+    const { startWord, definition } = await getStartWord();
+    sendWord = startWord;
+    changeMessages(receiveID, startWord, definition);
+    usedWords.update(usedWords => usedWords.concat(startWord));
+  });
 
   afterUpdate(() => {
     messagesElement.scrollTo(0, messagesElement.scrollHeight); // TODO: 바운스 애니메이션 넣기; updateScroll 함수 만들고 메시지 추가될 때 마다 이걸 실행하는 걸로
   });
 
-  let value = '';
-  let messages: { id: string; type: string; content: string }[] = [];
-  let messagesElement: HTMLDivElement;
+  function changeMessages(id: string, content: string, definition?: string) {
+    messages = messages.map(message => {
+      if (message.id === id) {
+        message.content = content;
+        message.definition = definition;
+      }
+      return message;
+    });
+  }
+
+  function getRandomID() {
+    return (Math.random() + 1).toString(36).substring(7);
+  }
 
   function sendMsg(msg: string, id: string) {
     messages = [...messages, { id, type: 'SEND', content: msg }];
   }
 
-  function receiveMsg(msg: string, id: string) {
-    messages = [...messages, { id, type: 'RECEIVE', content: msg }];
+  function receiveMsg(msg: string, id: string, definition?: string) {
+    messages = [...messages, { id, type: 'RECEIVE', content: msg, definition }];
   }
 
   async function onSubmit() {
@@ -25,20 +52,18 @@
     let word = value;
     value = '';
 
-    let sendID = (Math.random() + 1).toString(36).substring(7);
-    let receiveID = (Math.random() + 1).toString(36).substring(7);
+    let sendID = getRandomID();
+    let receiveID = getRandomID();
     sendMsg(word, sendID);
-
-
     receiveMsg('· · ·', receiveID);
-    const res = await getNewWord(word);
-    messages = messages.map(message => {
-      if (message.id === receiveID) message.content = res;
-      return message;
-    });
+
+    const res = await getNewWord(sendWord, word);
+    if (res.success) sendWord = res.message;
+    changeMessages(receiveID, res.message, res.definition);
   }
 </script>
 
+{$usedWords}
 <form on:submit|preventDefault={onSubmit} class="chat">
   <div class="chat-title">
     <h1>민뭉</h1>
@@ -49,17 +74,17 @@
   </div>
   <div class="messages" bind:this={messagesElement}>
     <div class="messages-content">
-      {#each messages as message}
-        {#if message.type === 'SEND'}
+      {#each messages as { type, content, definition }}
+        {#if type === 'SEND'}
           <div class="message message-personal">
-            {message.content}
+            {content}
           </div>
-          {:else if message.type === 'RECEIVE'}
-          <div class="message">
+          {:else if type === 'RECEIVE'}
+          <div class="message" title={definition ? definition : ''}>
             <figure class="avatar">
               <Icon name="robot" class="avatar-icon" width="25px" height="25px" />
             </figure>
-            {message.content}
+            {content}
           </div>
         {/if}
       {/each}

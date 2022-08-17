@@ -1,8 +1,8 @@
 import { api } from 'src/api';
 import replaceSpecials from './replaceSpecials';
 
-async function a() {
-  let { startWord, definition } = await api<'getStartWord'>('GET', '/api/getStartWord.json');
+async function getStartWord() {
+  let { startWord, definition } = await api<'getStartWord'>('GET', '/api/getStartWord');
   startWord = replaceSpecials(startWord);
   return {
     startWord,
@@ -10,4 +10,4 @@ async function a() {
   }
 }
 
-export default a;
+export default getStartWord;

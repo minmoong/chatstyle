@@ -26,7 +26,7 @@ async function getNewWord(endWord: string, word: string) {
     };
   }
 
-  const { existWord } = await api<'isExistWord'>('GET', `/api/isExistWord/${word}.json`);
+  const { existWord } = await api<'isExistWord'>('GET', `/api/isExistWord/${word}`);
   if (!existWord) {
     return {
       success: false,
@@ -36,7 +36,7 @@ async function getNewWord(endWord: string, word: string) {
   
   usedWords.update(usedWords => usedWords.concat(word));
 
-  let { newWord, definition } = await api<'getNewWord'>('POST', `/api/getNewWord.json`, {
+  let { newWord, definition } = await api<'getNewWord'>('POST', `/api/getNewWord`, {
     endWith: word[word.length - 1],
     usedWords: get(usedWords)
   });

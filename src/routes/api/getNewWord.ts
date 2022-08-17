@@ -1,7 +1,7 @@
 import type { RequestHandler } from '@sveltejs/kit';
 import https from 'https';
 import axios from 'axios';
-import replaceSpecials from 'src/functions/replaceSpecials';
+import replaceSpecials from 'src/util/replaceSpecials';
 
 export const POST: RequestHandler = async ({ request }) => {
   try {

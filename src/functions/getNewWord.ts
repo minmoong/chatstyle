@@ -1,6 +1,6 @@
 import { api } from 'src/api';
-import replaceSpecials from './replaceSpecials';
-import dueum from 'src/functions/dueum';
+import replaceSpecials from 'src/util/replaceSpecials';
+import dueum from 'src/util/dueum';
 import { usedWords } from 'src/store';
 import { get } from 'svelte/store';
 

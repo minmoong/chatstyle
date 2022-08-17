@@ -12,9 +12,11 @@
 
 <script lang="ts">
   import Chat from 'src/components/Chat.svelte';
+  import Leaderboard from 'src/components/Leaderboard.svelte';
   export let location;
 
   console.log(location);
 </script>
 
 <Chat />
+<Leaderboard />

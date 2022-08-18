@@ -9,7 +9,6 @@ generator client {
 }
 
 model RegionScore {
-  uid String @id @default(cuid())
-  region String
+  region String @id
   score BigInt @default(0)
 }

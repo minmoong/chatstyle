@@ -3,6 +3,8 @@ import replaceSpecials from 'src/util/replaceSpecials';
 import dueum from 'src/util/dueum';
 import { usedWords } from 'src/store';
 import { get } from 'svelte/store';
+import addScore from 'src/functions/addScore';
+import getRegion from 'src/functions/getRegion';
 
 async function getNewWord(endWord: string, word: string) {
   if (word[0] !== endWord[endWord.length - 1] && word[0] !== dueum(endWord[endWord.length - 1])) {
@@ -35,6 +37,7 @@ async function getNewWord(endWord: string, word: string) {
   }
   
   usedWords.update(usedWords => usedWords.concat(word));
+  addScore(await getRegion(), word.length);
 
   let { newWord, definition } = await api<'getNewWord'>('POST', `/api/getNewWord`, {
     endWith: word[word.length - 1],

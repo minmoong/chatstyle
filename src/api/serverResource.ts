@@ -28,4 +28,13 @@ export interface APIResource {
       definition: string;
     }
   };
+  addScore: {
+    method: 'POST';
+    endpoint: string;
+    req: {
+      region: string;
+      increasementScore: number;
+    };
+    res: {};
+  }
 }

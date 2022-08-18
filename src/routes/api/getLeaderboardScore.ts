@@ -4,7 +4,7 @@ export const GET: RequestHandler = async () => {
   try {
     return {
       status: 200,
-      body: 'hello'
+      body: 'asdf'
     };
   } catch (error) {
     throw error;

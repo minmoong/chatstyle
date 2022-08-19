@@ -5,6 +5,7 @@
   import getStartWord from 'src/functions/getStartWord';
   import Ripple from '@smui/ripple';
   import Icons from './Icons.svelte';
+  import getLeaderboardScore from 'src/functions/getLeaderboardScore';
 
   type message = {
     id: string;
@@ -18,6 +19,7 @@
   let messages: message[] = [];
   let messagesElement: HTMLDivElement;
   let sendWord: string = '';
+  let isOpen = false;
 
   let receiveID = getRandomID();
   receiveMsg('', receiveID, undefined, true);
@@ -27,6 +29,8 @@
     sendWord = startWord;
     changeMessages(receiveID, startWord, definition, false);
     usedWords.update(usedWords => usedWords.concat(startWord));
+
+    console.log(await getLeaderboardScore());
   });
 
   function updateScroll() {
@@ -75,6 +79,11 @@
 </script>
 
 <form on:submit|preventDefault={onSubmit} class="chat">
+  <div class="leaderboard" class:open={isOpen}>
+    <span on:click={() => isOpen = !isOpen}  use:Ripple={{ surface: true }}>
+      <Icons name="arrow-expand" width="40px" height="40px" fill="#c1c1c1" />
+    </span>
+  </div>
   <div class="messages" bind:this={messagesElement}>
     <div class="messages-content">
       {#each messages as { type, content, definition, loading }}
@@ -117,17 +126,68 @@
     @include desktop {
       @include absolute-center;
       width: 100%;
-      height: 80vh;
-      max-width: 400px;
-      max-height: 600px;
+      height: 90vh;
+      max-width: 500px;
+      max-height: 700px;
     }
     width: 100%;
     height: 100%;
     display: flex;
     justify-content: space-between;
     flex-direction: column;
-    border-radius: 20px;
-    border: 2px solid $primary-color-default;
+    border-radius: 0 0 20px 20px;
+    border-top: none;
+  }
+
+  .leaderboard {
+    position: absolute;
+    top: -50px;
+    z-index: 2;
+    width: 100%;
+    height: 50px;
+    border-bottom: 1px solid #ccc;
+    background: $primary-color-default;
+    border-radius: 0 0 20px 20px;
+    transition: 0.5s;
+
+    &::after {
+      @include mobile {
+        width: 170px;
+      }
+      @include tablet {
+        width: 250px;
+      }
+      @include desktop {
+        width: 200px;
+      }
+      content: '';
+      position: absolute;
+      left: 50%;
+      bottom: 5px;
+      transform: translateX(-50%);
+      display: block;
+      width: 130px;
+      height: 4px;
+      border-radius: 4px;
+      background: $primary-color-second;
+    }
+
+    &.open {
+      position: absolute;
+      height: 500px;
+      z-index: 2;
+    }
+
+    span {
+      position: absolute;
+      top: 5px;
+      right: 10px;
+      display: block;
+      width: 40px;
+      height: 40px;
+      cursor: pointer;
+      border-radius: 50%;
+    }
   }
 
   .messages {
@@ -148,7 +208,6 @@
           font-size: 18px;
         }
         position: relative;
-        z-index: 3;
         max-width: 310px;
         word-break: break-word;
         clear: both;

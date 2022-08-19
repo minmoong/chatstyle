@@ -2,11 +2,11 @@
 </script>
 
 <div class="leaderboard">
-  <div class="myregion"></div>
 </div>
 
 <style lang="scss">
   .leaderboard {
-    
+    width: 100%;
+    height: 100%;
   }
 </style>

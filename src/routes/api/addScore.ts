@@ -22,7 +22,11 @@ export const POST: RequestHandler = async ({ request }) => {
     });
 
     return {
-      status: 200
+      status: 200,
+      body: {
+        region,
+        score: Number(score) + increasementScore
+      }
     };
   } catch (error) {
     throw error;

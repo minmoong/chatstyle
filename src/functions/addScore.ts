@@ -1,7 +1,8 @@
 import { api } from 'src/api';
 
 async function addScore(region: string, increasementScore: number) {
-  api<'addScore'>('POST', '/api/addScore', { region, increasementScore });
+  const res = await api<'addScore'>('POST', '/api/addScore', { region, increasementScore });
+  console.log(res);
 }
 
 export default addScore;

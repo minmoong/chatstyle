@@ -3,6 +3,27 @@ $background-color-primary: #e4e6eb;
 $text-primary-color: #444;
 $text-secondary-color: #777;
 $text-color-white: #fff;
+$mobile: 320px;
+$tablet: 768px;
+$desktop: 1024px;
+
+@mixin mobile {
+  @media (min-width: $mobile) and (max-width: $tablet) {
+    @content;
+  }
+}
+
+@mixin tablet {
+  @media (min-width: $tablet) and (max-width: $desktop) {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @media (min-width: $desktop) {
+    @content;
+  }
+}
 
 @mixin absolute-center {
   position: absolute;

@@ -75,13 +75,6 @@
 </script>
 
 <form on:submit|preventDefault={onSubmit} class="chat">
-  <div class="chat-title">
-    <h1>민뭉</h1>
-    <h2>당신의 끝말잇기 아바타</h2>
-    <figure class="avatar">
-      <Icons name="robot" class="avatar-icon" width="60px" height="60px" />
-    </figure>
-  </div>
   <div class="messages" bind:this={messagesElement}>
     <div class="messages-content">
       {#each messages as { type, content, definition, loading }}
@@ -121,54 +114,20 @@
 
 <style lang="scss">
   .chat {
-    @include absolute-center;
+    @include desktop {
+      @include absolute-center;
+      width: 100%;
+      height: 80vh;
+      max-width: 400px;
+      max-height: 600px;
+    }
     width: 100%;
-    height: 80vh;
-    max-width: 400px;
-    max-height: 600px;
+    height: 100%;
     display: flex;
     justify-content: space-between;
     flex-direction: column;
     border-radius: 20px;
     border: 2px solid $primary-color-default;
-  }
-
-  .chat-title {
-    flex: 0 1 45px;
-    position: relative;
-    width: 100%;
-    border-bottom: 1px solid #ccc;
-    color: $text-secondary-color;
-    padding: 50px 0 5px;
-    text-align: center;
-    margin-bottom: 20px;
-
-    h1,
-    h2 {
-      font-size: 20px;
-      margin: 0;
-      padding: 0;
-    }
-
-    h2 {
-      font-weight: normal;
-      font-size: 15px;
-      letter-spacing: 1px;
-    }
-
-    .avatar {
-      @include flex-center;
-      position: absolute;
-      left: 0;
-      top: -40px;
-      right: 0;
-      margin: auto;
-      width: 80px;
-      height: 80px;
-      border-radius: 50%;
-      border: 2px solid $primary-color-default;
-      background: #fff;
-    }
   }
 
   .messages {
@@ -182,6 +141,12 @@
       height: 100%;
 
       .message {
+        @include tablet {
+          font-size: 20px;
+        }
+        @include desktop {
+          font-size: 18px;
+        }
         position: relative;
         z-index: 3;
         max-width: 310px;
@@ -271,7 +236,7 @@
       outline: none;
       font-size: 15px;
       height: 24px;
-      width: 280px;
+      width: 85%;
       color: $text-primary-color;
     }
 

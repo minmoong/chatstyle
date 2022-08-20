@@ -15,9 +15,18 @@ export const GET: RequestHandler = async () => {
     const res = await axios.get(getStartWordReqURL, { httpsAgent });
 
     const items = res.data.channel.item;
-    const item = items.filter((item: any) => {
+    let item = items.filter((item: any) => {
       if (replaceSpecials(item.word).length > 1) return item;
     });
+
+    if (item.length === 0) {
+      item = [
+        {
+          word: '나무',
+          definition: '줄기와 가지와 뿌리가 있고 가지에 잎이 달리며 때가 되면 꽃이 피는 여러해살이 식물.'
+        }
+      ];
+    }
 
     return {
       status: 200,

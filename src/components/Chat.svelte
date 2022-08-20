@@ -58,8 +58,12 @@
 
   function receiveMsg(msg: string, id: string, definition?: string, loading?: boolean) {
     messages = [...messages, { id, type: 'RECEIVE', content: msg, definition, loading }];
-    const spreadScroll = setInterval(updateScroll, 100);
-    setTimeout(() => clearInterval(spreadScroll), 1000);
+    spreadScroll(1000);
+  }
+
+  function spreadScroll(ms: number) {
+    const ss = setInterval(updateScroll, 100);
+    setTimeout(() => clearInterval(ss), ms);
   }
 
   async function onSubmit() {
@@ -75,17 +79,27 @@
     const res = await getNewWord(sendWord, word);
     if (res.success) sendWord = res.message;
     changeMessages(receiveID, res.message, res.definition, false);
+    spreadScroll(500);
   }
 </script>
 
 <form on:submit|preventDefault={onSubmit} class="chat">
   <div class="leaderboard" class:open={isOpen}>
-    <span on:click={() => isOpen = !isOpen}  use:Ripple={{ surface: true }}>
+    <span on:click={() => {
+      isOpen = !isOpen;
+    }} use:Ripple={{ surface: true }}>
       <Icons name="arrow-expand" width="40px" height="40px" fill="#c1c1c1" />
     </span>
   </div>
   <div class="messages" bind:this={messagesElement}>
     <div class="messages-content">
+      <div class="message">
+        <figure class="avatar">
+          <Icons name="robot" class="avatar-icon" width="25px" height="25px" />
+        </figure>
+        ✔️ 끝말잇기 시작! ✔️
+        <span></span>
+      </div>
       {#each messages as { type, content, definition, loading }}
         {#if type === 'SEND'}
           <div class="message message-personal">
@@ -141,47 +155,44 @@
 
   .leaderboard {
     position: absolute;
-    top: -50px;
     z-index: 2;
     width: 100%;
     height: 50px;
+    max-height: 560px;
     border-bottom: 1px solid #ccc;
     background: $primary-color-default;
     border-radius: 0 0 20px 20px;
-    transition: 0.5s;
+    transition: 0.7s;
 
-    &::after {
-      @include mobile {
-        width: 170px;
-      }
-      @include tablet {
-        width: 250px;
-      }
-      @include desktop {
-        width: 200px;
-      }
-      content: '';
-      position: absolute;
-      left: 50%;
-      bottom: 5px;
-      transform: translateX(-50%);
-      display: block;
-      width: 130px;
-      height: 4px;
-      border-radius: 4px;
-      background: $primary-color-second;
-    }
+    // &::after {
+    //   @include mobile {
+    //     width: 170px;
+    //   }
+    //   @include tablet {
+    //     width: 250px;
+    //   }
+    //   @include desktop {
+    //     width: 200px;
+    //   }
+    //   content: '';
+    //   position: absolute;
+    //   left: 50%;
+    //   bottom: 5px;
+    //   transform: translateX(-50%);
+    //   display: block;
+    //   width: 130px;
+    //   height: 4px;
+    //   border-radius: 4px;
+    //   background: $primary-color-second;
+    // }
 
     &.open {
       position: absolute;
-      height: 500px;
+      height: 100%;
       z-index: 2;
     }
 
     span {
-      position: absolute;
-      top: 5px;
-      right: 10px;
       display: block;
       width: 40px;
       height: 40px;
@@ -191,6 +202,7 @@
   }
 
   .messages {
+    padding: 50px 0 0;
     flex: 1 1 auto;
     overflow-y: scroll;
     overflow-x: hidden;
@@ -223,6 +235,15 @@
         transform: scale(0);
         transform-origin: 0 0;
         animation: bounce 500ms linear both;
+
+        &.message-personal {
+          float: right;
+          text-align: right;
+          border-radius: 10px 10px 0 10px;
+          background: $primary-color-default;
+          color: $text-color-white;
+          margin: 2px 0;
+        }
 
         &.loading {
           width: 50px;
@@ -263,15 +284,6 @@
           border-radius: 50%;
           border: 1px solid $primary-color-default;
         }
-      }
-
-      .message-personal {
-        float: right;
-        text-align: right;
-        border-radius: 10px 10px 0 10px;
-        background: $primary-color-default;
-        color: $text-color-white;
-        margin: 2px 0;
       }
     }
   }

@@ -15,8 +15,10 @@ export interface APIResource {
       usedWords: string[];
     };
     res: {
-      newWord: string;
-      definition: string;
+      found: boolean;
+      newWord?: string;
+      definition?: string;
+      message?: string;
     };
   };
   getStartWord: {

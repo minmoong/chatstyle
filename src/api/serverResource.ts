@@ -38,5 +38,13 @@ export interface APIResource {
       increasementScore: number;
     };
     res: {};
+  };
+  getLeaderboard: {
+    method: 'GET';
+    endpoint: string;
+    req: {}
+    res: {
+      leaderboard: Leaderboard[]
+    };
   }
 }

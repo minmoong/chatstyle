@@ -5,7 +5,7 @@
   import getStartWord from 'src/functions/getStartWord';
   import Ripple from '@smui/ripple';
   import Icons from './Icons.svelte';
-  import getLeaderboardScore from 'src/functions/getLeaderboardScore';
+  import Leaderboard from './Leaderboard.svelte';
 
   type message = {
     id: string;
@@ -19,7 +19,6 @@
   let messages: message[] = [];
   let messagesElement: HTMLDivElement;
   let sendWord: string = '';
-  let isOpen = false;
 
   let receiveID = getRandomID();
   receiveMsg('', receiveID, undefined, true);
@@ -29,8 +28,6 @@
     sendWord = startWord;
     changeMessages(receiveID, startWord, definition, false);
     usedWords.update(usedWords => usedWords.concat(startWord));
-
-    console.log(await getLeaderboardScore());
   });
 
   function updateScroll() {
@@ -84,13 +81,7 @@
 </script>
 
 <form on:submit|preventDefault={onSubmit} class="chat">
-  <div class="leaderboard" class:open={isOpen}>
-    <span on:click={() => {
-      isOpen = !isOpen;
-    }} use:Ripple={{ surface: true }}>
-      <Icons name="arrow-expand" width="40px" height="40px" fill="#c1c1c1" />
-    </span>
-  </div>
+  <Leaderboard />
   <div class="messages" bind:this={messagesElement}>
     <div class="messages-content">
       <div class="message">
@@ -138,11 +129,13 @@
 <style lang="scss">
   .chat {
     @include desktop {
-      @include absolute-center;
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
       width: 100%;
-      height: 90vh;
+      height: 100%;
       max-width: 500px;
-      max-height: 700px;
+      max-height: 85vh;
     }
     width: 100%;
     height: 100%;
@@ -153,56 +146,8 @@
     border-top: none;
   }
 
-  .leaderboard {
-    position: absolute;
-    z-index: 2;
-    width: 100%;
-    height: 50px;
-    max-height: 560px;
-    border-bottom: 1px solid #ccc;
-    background: $primary-color-default;
-    border-radius: 0 0 20px 20px;
-    transition: 0.7s;
-
-    // &::after {
-    //   @include mobile {
-    //     width: 170px;
-    //   }
-    //   @include tablet {
-    //     width: 250px;
-    //   }
-    //   @include desktop {
-    //     width: 200px;
-    //   }
-    //   content: '';
-    //   position: absolute;
-    //   left: 50%;
-    //   bottom: 5px;
-    //   transform: translateX(-50%);
-    //   display: block;
-    //   width: 130px;
-    //   height: 4px;
-    //   border-radius: 4px;
-    //   background: $primary-color-second;
-    // }
-
-    &.open {
-      position: absolute;
-      height: 100%;
-      z-index: 2;
-    }
-
-    span {
-      display: block;
-      width: 40px;
-      height: 40px;
-      cursor: pointer;
-      border-radius: 50%;
-    }
-  }
-
   .messages {
-    padding: 50px 0 0;
+    padding: 60px 0 0;
     flex: 1 1 auto;
     overflow-y: scroll;
     overflow-x: hidden;

@@ -1,7 +1,7 @@
 import { api } from 'src/api';
 import replaceSpecials from 'src/util/replaceSpecials';
 import dueum from 'src/util/dueum';
-import { usedWords } from 'src/store';
+import { usedWords, mine, myCounter } from 'src/store';
 import { get } from 'svelte/store';
 import addScore from 'src/functions/addScore';
 import getRegion from 'src/functions/getRegion';
@@ -37,18 +37,30 @@ async function getNewWord(endWord: string, word: string) {
   }
   
   usedWords.update(usedWords => usedWords.concat(word));
-  addScore(await getRegion(), word.length);
+  await addScore(word.length);
+  mine.set({
+    region: await getRegion(),
+    scoreCount: get(mine).scoreCount + word.length
+  });
+  myCounter.set(get(myCounter) + word.length);
 
-  let { newWord, definition } = await api<'getNewWord'>('POST', `/api/getNewWord`, {
+  let { found, newWord, definition, messages } = await api<'getNewWord'>('POST', `/api/getNewWord`, {
     endWith: word[word.length - 1],
     usedWords: get(usedWords)
   });
-  newWord = replaceSpecials(newWord);
-  usedWords.update(usedWords => usedWords.concat(newWord));
+  if (found) {
+    newWord = replaceSpecials(newWord as string);
+    usedWords.update(usedWords => usedWords.concat(newWord as string));
+    return {
+      success: true,
+      message: newWord,
+      definition
+    };
+  }
+
   return {
-    success: true,
-    message: newWord,
-    definition
+    end: true,
+    messages
   };
 }
 

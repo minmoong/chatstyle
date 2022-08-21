@@ -75,7 +75,13 @@
 
     const res = await getNewWord(sendWord, word);
     if (res.success) sendWord = res.message;
-    changeMessages(receiveID, res.message, res.definition, false);
+    if (res.end) {
+      changeMessages(receiveID, (res.messages as string[])[0], undefined, false);
+      receiveMsg((res.messages as string[])[1], 'END');
+      // TODO: 게임 완전히 끝내기 (인풋 등등 막기)
+      return;
+    }
+    changeMessages(receiveID, res.message as string, res.definition, false);
     spreadScroll(500);
   }
 </script>

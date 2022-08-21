@@ -31,8 +31,8 @@ export const GET: RequestHandler = async () => {
     return {
       status: 200,
       body: {
-        startWord: item[0].word,
-        definition: item[0].sense[0].definition
+        startWord: item[Math.floor(Math.random() * item.length)].word,
+        definition: item[Math.floor(Math.random() * item.length)].sense[0].definition
       }
     };
   } catch (error) {

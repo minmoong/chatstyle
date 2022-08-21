@@ -13,16 +13,14 @@ export const POST: RequestHandler = async ({ request }) => {
     });
     const res = await axios.get(getNewWordReqURL, { httpsAgent });
 
-    const items = res.data.channel.item.filter((item: any) => {
-      if (replaceSpecials(item.word).length > 1 && !usedWords.includes(replaceSpecials(item.word))) return item;
-    });
+    const items = res.data.channel.item.filter((item: any) => replaceSpecials(item.word).length > 1 && !usedWords.includes(replaceSpecials(item.word)));
 
     if (items.length === 0) {
       return {
         status: 200,
         body: {
           found: false,
-          message: '당신이 이겼습니다! 1,000 포인트를 지급합니다!'
+          messages: ['✔️ 항복하겠습니다! ✔️', '1,000 포인트를 드립니다!']
         }
       };
     }
@@ -33,7 +31,7 @@ export const POST: RequestHandler = async ({ request }) => {
       status: 200,
       body: {
         found: true,
-        newWord: item.word.replace('하다', ''),
+        newWord: item.word,
         definition: item.sense[0].definition
       }
     };

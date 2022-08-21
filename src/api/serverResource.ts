@@ -18,7 +18,7 @@ export interface APIResource {
       found: boolean;
       newWord?: string;
       definition?: string;
-      message?: string;
+      messages?: string[];
     };
   };
   getStartWord: {
@@ -46,5 +46,13 @@ export interface APIResource {
     res: {
       leaderboard: Leaderboard[]
     };
+  }
+  registerRegion: {
+    method: 'POST';
+    endpoint: string;
+    req: {
+      region: string;
+    };
+    res: {};
   }
 }

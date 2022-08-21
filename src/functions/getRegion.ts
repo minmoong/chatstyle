@@ -17,7 +17,7 @@ const getRegion = async () => {
         return city;
       }
 
-      const city = '다른 나라';
+      const city = 'Other Countries';
       localStorage.region = city;
       localStorage.enRegion = enRegion;
       return city;

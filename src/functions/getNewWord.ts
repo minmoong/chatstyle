@@ -32,7 +32,7 @@ async function getNewWord(endWord: string, word: string) {
   if (!existWord) {
     return {
       success: false,
-      message: '존재하지 않는 단어입니다. 😥'
+      message: '사전에 존재하지 않는 단어입니다. 😥'
     };
   }
   

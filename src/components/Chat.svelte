@@ -1,11 +1,14 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { usedWords } from 'src/store';
+  import { usedWords, myCounter } from 'src/store';
   import getNewWord from 'src/functions/getNewWord';
   import getStartWord from 'src/functions/getStartWord';
   import Ripple from '@smui/ripple';
   import Icons from './Icons.svelte';
   import Leaderboard from './Leaderboard.svelte';
+  import addScore from 'src/functions/addScore';
+  import { get } from 'svelte/store';
+  import Pling from 'src/assets/audio/pling.mp3';
 
   type message = {
     id: string;
@@ -19,6 +22,7 @@
   let messages: message[] = [];
   let messagesElement: HTMLDivElement;
   let sendWord: string = '';
+  let isEnded = false;
 
   let receiveID = getRandomID();
   receiveMsg('', receiveID, undefined, true);
@@ -43,6 +47,9 @@
       }
       return message;
     });
+
+    let audio = new Audio(Pling);
+    audio.play();
   }
 
   function getRandomID() {
@@ -78,7 +85,9 @@
     if (res.end) {
       changeMessages(receiveID, (res.messages as string[])[0], undefined, false);
       receiveMsg((res.messages as string[])[1], 'END');
-      // TODO: 게임 완전히 끝내기 (인풋 등등 막기)
+      addScore(1000);
+      myCounter.set(get(myCounter) + 1000);
+      isEnded = true;
       return;
     }
     changeMessages(receiveID, res.message as string, res.definition, false);
@@ -114,22 +123,29 @@
       {/each}
     </div>
   </div>
-  <div class="message-box">
-    <input
-      type="text"
-      placeholder="보내기..."
-      bind:value
-    />
-    <span use:Ripple={{ surface: true }}>
-      <button>
-        {#if value === ''}
-          <Icons name="send-outlined" width="23" height="23" />
-          {:else}
-            <Icons name="send-filled" width="23" height="23" />
-        {/if}
-      </button>
-    </span>
-  </div>
+  {#if !isEnded}
+    <div class="message-box">
+      <input
+        type="text"
+        placeholder="보내기..."
+        bind:value
+      />
+      <span use:Ripple={{ surface: true }}>
+        <button>
+          {#if value === ''}
+            <Icons name="send-outlined" width="23" height="23" />
+            {:else}
+              <Icons name="send-filled" width="23" height="23" />
+          {/if}
+        </button>
+      </span>
+    </div>
+    {:else}
+      <div class="restart" on:click={() => { location.reload(); }}>
+        <div class="restart-name">다시 하기</div>
+        <Icons name="refresh" width="20" height="20" class="refresh-icon" />
+      </div>
+  {/if}
 </form>
 
 <style lang="scss">
@@ -277,6 +293,24 @@
         background: transparent;
         cursor: pointer;
       }
+    }
+  }
+
+  .restart {
+    cursor: pointer;
+    flex: 0 1 45px;
+    width: 90%;
+    margin: 15px auto;
+    padding: 8px 0 8px 15px;
+    height: 100%;
+    text-align: center;
+    border-radius: 15px;
+    background: $background-color-primary;
+    color: $primary-color-default;
+    
+    .restart-name {
+      font-size: 17px;
+      font-weight: bold;
     }
   }
 </style>

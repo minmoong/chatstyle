@@ -20,7 +20,7 @@ export const POST: RequestHandler = async ({ request }) => {
         status: 200,
         body: {
           found: false,
-          messages: ['✔️ 항복하겠습니다! ✔️', '1,000 포인트를 드립니다!']
+          messages: ['🏳️ 항복하겠습니다! 🏳️', '1,000 포인트를 드립니다!']
         }
       };
     }

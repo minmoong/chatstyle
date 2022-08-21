@@ -14,12 +14,13 @@ export const GET: RequestHandler = async () => {
     });
     const res = await axios.get(getStartWordReqURL, { httpsAgent });
 
-    const items = res.data.channel.item;
-    let item = items.filter((item: any) => {
+    let items = res.data.channel.item.filter((item: any) => {
       if (replaceSpecials(item.word).length > 1) return item;
     });
 
-    if (item.length === 0) {
+    let item = items[Math.floor(Math.random() * items.length)];
+
+    if (items.length === 0) {
       item = [
         {
           word: '나무',
@@ -31,8 +32,8 @@ export const GET: RequestHandler = async () => {
     return {
       status: 200,
       body: {
-        startWord: item[Math.floor(Math.random() * item.length)].word,
-        definition: item[Math.floor(Math.random() * item.length)].sense[0].definition
+        startWord: item.word,
+        definition: item.sense[0].definition
       }
     };
   } catch (error) {

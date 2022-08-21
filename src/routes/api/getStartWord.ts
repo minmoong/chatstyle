@@ -1,7 +1,7 @@
 import type { RequestHandler } from '@sveltejs/kit';
 import https from 'https';
 import axios from 'axios';
-import replaceSpecials from 'src/functions/replaceSpecials';
+import replaceSpecials from 'src/util/replaceSpecials';
 
 export const GET: RequestHandler = async () => {
   try {
@@ -15,15 +15,24 @@ export const GET: RequestHandler = async () => {
     const res = await axios.get(getStartWordReqURL, { httpsAgent });
 
     const items = res.data.channel.item;
-    const item = items.filter((item: any) => {
+    let item = items.filter((item: any) => {
       if (replaceSpecials(item.word).length > 1) return item;
     });
+
+    if (item.length === 0) {
+      item = [
+        {
+          word: '나무',
+          definition: '줄기와 가지와 뿌리가 있고 가지에 잎이 달리며 때가 되면 꽃이 피는 여러해살이 식물.'
+        }
+      ];
+    }
 
     return {
       status: 200,
       body: {
-        startWord: item[0].word,
-        definition: item[0].sense[0].definition
+        startWord: item[Math.floor(Math.random() * item.length)].word,
+        definition: item[Math.floor(Math.random() * item.length)].sense[0].definition
       }
     };
   } catch (error) {

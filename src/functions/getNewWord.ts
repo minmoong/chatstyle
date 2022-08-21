@@ -1,8 +1,10 @@
 import { api } from 'src/api';
-import replaceSpecials from './replaceSpecials';
-import dueum from 'src/functions/dueum';
-import { usedWords } from 'src/store';
+import replaceSpecials from 'src/util/replaceSpecials';
+import dueum from 'src/util/dueum';
+import { usedWords, mine, myCounter } from 'src/store';
 import { get } from 'svelte/store';
+import addScore from 'src/functions/addScore';
+import getRegion from 'src/functions/getRegion';
 
 async function getNewWord(endWord: string, word: string) {
   if (word[0] !== endWord[endWord.length - 1] && word[0] !== dueum(endWord[endWord.length - 1])) {
@@ -26,7 +28,7 @@ async function getNewWord(endWord: string, word: string) {
     };
   }
 
-  const { existWord } = await api<'isExistWord'>('GET', `/api/isExistWord/${word}.json`);
+  const { existWord } = await api<'isExistWord'>('GET', `/api/isExistWord/${word}`);
   if (!existWord) {
     return {
       success: false,
@@ -35,17 +37,30 @@ async function getNewWord(endWord: string, word: string) {
   }
   
   usedWords.update(usedWords => usedWords.concat(word));
+  await addScore(word.length);
+  mine.set({
+    region: await getRegion(),
+    scoreCount: get(mine).scoreCount + word.length
+  });
+  myCounter.set(get(myCounter) + word.length);
 
-  let { newWord, definition } = await api<'getNewWord'>('POST', `/api/getNewWord.json`, {
+  let { found, newWord, definition, messages } = await api<'getNewWord'>('POST', `/api/getNewWord`, {
     endWith: word[word.length - 1],
     usedWords: get(usedWords)
   });
-  newWord = replaceSpecials(newWord);
-  usedWords.update(usedWords => usedWords.concat(newWord));
+  if (found) {
+    newWord = replaceSpecials(newWord as string);
+    usedWords.update(usedWords => usedWords.concat(newWord as string));
+    return {
+      success: true,
+      message: newWord,
+      definition
+    };
+  }
+
   return {
-    success: true,
-    message: newWord,
-    definition
+    end: true,
+    messages
   };
 }
 

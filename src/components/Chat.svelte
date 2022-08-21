@@ -5,6 +5,7 @@
   import getStartWord from 'src/functions/getStartWord';
   import Ripple from '@smui/ripple';
   import Icons from './Icons.svelte';
+  import Leaderboard from './Leaderboard.svelte';
 
   type message = {
     id: string;
@@ -54,8 +55,12 @@
 
   function receiveMsg(msg: string, id: string, definition?: string, loading?: boolean) {
     messages = [...messages, { id, type: 'RECEIVE', content: msg, definition, loading }];
-    const spreadScroll = setInterval(updateScroll, 100);
-    setTimeout(() => clearInterval(spreadScroll), 1000);
+    spreadScroll(1000);
+  }
+
+  function spreadScroll(ms: number) {
+    const ss = setInterval(updateScroll, 100);
+    setTimeout(() => clearInterval(ss), ms);
   }
 
   async function onSubmit() {
@@ -70,20 +75,28 @@
 
     const res = await getNewWord(sendWord, word);
     if (res.success) sendWord = res.message;
-    changeMessages(receiveID, res.message, res.definition, false);
+    if (res.end) {
+      changeMessages(receiveID, (res.messages as string[])[0], undefined, false);
+      receiveMsg((res.messages as string[])[1], 'END');
+      // TODO: 게임 완전히 끝내기 (인풋 등등 막기)
+      return;
+    }
+    changeMessages(receiveID, res.message as string, res.definition, false);
+    spreadScroll(500);
   }
 </script>
 
 <form on:submit|preventDefault={onSubmit} class="chat">
-  <div class="chat-title">
-    <h1>민뭉</h1>
-    <h2>당신의 끝말잇기 아바타</h2>
-    <figure class="avatar">
-      <Icons name="robot" class="avatar-icon" width="60px" height="60px" />
-    </figure>
-  </div>
+  <Leaderboard />
   <div class="messages" bind:this={messagesElement}>
     <div class="messages-content">
+      <div class="message">
+        <figure class="avatar">
+          <Icons name="robot" class="avatar-icon" width="25px" height="25px" />
+        </figure>
+        ✔️ 끝말잇기 시작! ✔️
+        <span></span>
+      </div>
       {#each messages as { type, content, definition, loading }}
         {#if type === 'SEND'}
           <div class="message message-personal">
@@ -121,57 +134,26 @@
 
 <style lang="scss">
   .chat {
-    @include absolute-center;
+    @include desktop {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      height: 100%;
+      max-width: 500px;
+      max-height: 85vh;
+    }
     width: 100%;
-    height: 80vh;
-    max-width: 400px;
-    max-height: 600px;
+    height: 100%;
     display: flex;
     justify-content: space-between;
     flex-direction: column;
-    border-radius: 20px;
-    border: 2px solid $primary-color-default;
-  }
-
-  .chat-title {
-    flex: 0 1 45px;
-    position: relative;
-    width: 100%;
-    border-bottom: 1px solid #ccc;
-    color: $text-secondary-color;
-    padding: 50px 0 5px;
-    text-align: center;
-    margin-bottom: 20px;
-
-    h1,
-    h2 {
-      font-size: 20px;
-      margin: 0;
-      padding: 0;
-    }
-
-    h2 {
-      font-weight: normal;
-      font-size: 15px;
-      letter-spacing: 1px;
-    }
-
-    .avatar {
-      @include flex-center;
-      position: absolute;
-      left: 0;
-      top: -40px;
-      right: 0;
-      margin: auto;
-      width: 80px;
-      height: 80px;
-      border-radius: 50%;
-      border: 2px solid $primary-color-default;
-      background: #fff;
-    }
+    border-radius: 0 0 20px 20px;
+    border-top: none;
   }
 
   .messages {
+    padding: 60px 0 0;
     flex: 1 1 auto;
     overflow-y: scroll;
     overflow-x: hidden;
@@ -182,8 +164,13 @@
       height: 100%;
 
       .message {
+        @include tablet {
+          font-size: 20px;
+        }
+        @include desktop {
+          font-size: 18px;
+        }
         position: relative;
-        z-index: 3;
         max-width: 310px;
         word-break: break-word;
         clear: both;
@@ -199,6 +186,15 @@
         transform: scale(0);
         transform-origin: 0 0;
         animation: bounce 500ms linear both;
+
+        &.message-personal {
+          float: right;
+          text-align: right;
+          border-radius: 10px 10px 0 10px;
+          background: $primary-color-default;
+          color: $text-color-white;
+          margin: 2px 0;
+        }
 
         &.loading {
           width: 50px;
@@ -240,15 +236,6 @@
           border: 1px solid $primary-color-default;
         }
       }
-
-      .message-personal {
-        float: right;
-        text-align: right;
-        border-radius: 10px 10px 0 10px;
-        background: $primary-color-default;
-        color: $text-color-white;
-        margin: 2px 0;
-      }
     }
   }
 
@@ -271,7 +258,7 @@
       outline: none;
       font-size: 15px;
       height: 24px;
-      width: 280px;
+      width: 85%;
       color: $text-primary-color;
     }
 

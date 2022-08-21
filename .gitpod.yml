@@ -1,6 +1,15 @@
+# export HMR_HOST=`gp url 5173`
+
+image: gitpod/workspace-postgres
+
 tasks:
   - init: npm install
     command: npm run dev
+  - command: npx prisma studio
+
+ports:
+  - port: 5432
+    onOpen: ignore
 
 vscode:
   extensions:

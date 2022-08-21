@@ -9,3 +9,6 @@ declare namespace App {
 	// interface Session {}
 	// interface Stuff {}
 }
+
+type Fetch = (info: RequestInfo, init?: RequestInit | undefined) => Promise<Response>;
+type Leaderboard = { region: string; score: number; }

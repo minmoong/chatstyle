@@ -1,7 +1,7 @@
 import type { RequestHandler } from '@sveltejs/kit';
 import https from 'https';
 import axios from 'axios';
-import replaceSpecials from 'src/functions/replaceSpecials';
+import replaceSpecials from 'src/util/replaceSpecials';
 
 export const POST: RequestHandler = async ({ request }) => {
   try {
@@ -13,27 +13,26 @@ export const POST: RequestHandler = async ({ request }) => {
     });
     const res = await axios.get(getNewWordReqURL, { httpsAgent });
 
-    const items = res.data.channel.item;
-    const item = items.filter((item: any) => {
-      if (replaceSpecials(item.word).length > 1 && !usedWords.includes(replaceSpecials(item.word))) return item;
-    });
+    const items = res.data.channel.item.filter((item: any) => replaceSpecials(item.word).length > 1 && !usedWords.includes(replaceSpecials(item.word)));
 
-    if (items.length === 0 || item.length === 0) {
+    if (items.length === 0) {
       return {
         status: 200,
         body: {
           found: false,
-          message: '당신이 이겼습니다! 1,000 포인트를 지급합니다!'
+          messages: ['✔️ 항복하겠습니다! ✔️', '1,000 포인트를 드립니다!']
         }
       };
     }
+
+    const item = items[Math.floor(Math.random() * items.length)];
 
     return {
       status: 200,
       body: {
         found: true,
-        newWord: item[0].word,
-        definition: item[0].sense[0].definition
+        newWord: item.word,
+        definition: item.sense[0].definition
       }
     };
   } catch (error) {

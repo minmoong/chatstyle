@@ -84,7 +84,9 @@
               description: '지역별 끝말잇기 점수 대결!',
               imageUrl:
                 'https://user-images.githubusercontent.com/62737839/185826141-ee514273-421c-4211-aac9-4c194b7a150a.PNG',
-              link: {}
+              link: {
+                webUrl: url
+              }
             }
           });
         }

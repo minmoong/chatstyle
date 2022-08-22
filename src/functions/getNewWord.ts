@@ -6,7 +6,7 @@ import { get } from 'svelte/store';
 import addScore from 'src/functions/addScore';
 import getRegion from 'src/functions/getRegion';
 
-async function getNewWord(endWord: string, word: string) {
+async function getNewWord(endWord: string, word: string, changeMessages: any, sendID: string) {
   if (word[0] !== endWord[endWord.length - 1] && word[0] !== dueum(endWord[endWord.length - 1])) {
     return {
       success: false,
@@ -28,13 +28,15 @@ async function getNewWord(endWord: string, word: string) {
     };
   }
 
-  const { existWord } = await api<'isExistWord'>('GET', `/api/isExistWord/${word}`);
+  const { existWord, mean } = await api<'isExistWord'>('GET', `/api/isExistWord/${word}`);
   if (!existWord) {
     return {
       success: false,
       message: '사전에 존재하지 않는 단어입니다. 😥'
     };
   }
+
+  changeMessages(false, sendID, word, mean);
   
   usedWords.update(usedWords => usedWords.concat(word));
   await addScore(word.length);
@@ -54,13 +56,15 @@ async function getNewWord(endWord: string, word: string) {
     return {
       success: true,
       message: newWord,
-      definition
+      definition,
+      mean
     };
   }
 
   return {
     end: true,
-    messages
+    messages,
+    mean
   };
 }
 

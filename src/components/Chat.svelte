@@ -30,7 +30,7 @@
   onMount(async () => {
     const { startWord, definition } = await getStartWord();
     sendWord = startWord;
-    changeMessages(receiveID, startWord, definition, false);
+    changeMessages(true, receiveID, startWord, definition, false);
     usedWords.update(usedWords => usedWords.concat(startWord));
   });
 
@@ -38,7 +38,7 @@
     messagesElement?.scrollTo(0, messagesElement.scrollHeight);
   }
 
-  function changeMessages(id: string, content: string, definition?: string, loading?: boolean) {
+  function changeMessages(isReceive: boolean, id: string, content: string, definition?: string, loading?: boolean) {
     messages = messages.map(message => {
       if (message.id === id) {
         message.content = content;
@@ -48,15 +48,19 @@
       return message;
     });
 
-    let promise = (new Audio(Pling)).play();
-    if (promise !== undefined) {
-      promise.then(_ => {
-        // Autoplay started!
-      }).catch(error => {
-        // Autoplay was prevented.
-        // Show a "Play" button so that user can start playback.
-      });
+    if (isReceive) {
+      let promise = (new Audio(Pling)).play();
+      if (promise !== undefined) {
+        promise.then(_ => {
+          // Autoplay started!
+        }).catch(error => {
+          // Autoplay was prevented.
+          // Show a "Play" button so that user can start playback.
+        });
+      }
     }
+
+    spreadScroll(500);
   }
 
   function getRandomID() {
@@ -87,17 +91,17 @@
     sendMsg(word, sendID);
     receiveMsg('', receiveID, undefined, true);
 
-    const res = await getNewWord(sendWord, word);
+    const res = await getNewWord(sendWord, word, changeMessages, sendID);
     if (res.success) sendWord = res.message;
     if (res.end) {
-      changeMessages(receiveID, (res.messages as string[])[0], undefined, false);
+      changeMessages(true, receiveID, (res.messages as string[])[0], undefined, false);
       receiveMsg((res.messages as string[])[1], 'END');
       addScore(1000);
       myCounter.set(get(myCounter) + 1000);
       isEnded = true;
       return;
     }
-    changeMessages(receiveID, res.message as string, res.definition, false);
+    changeMessages(true, receiveID, res.message as string, res.definition, false);
     spreadScroll(500);
   }
 </script>
@@ -110,20 +114,28 @@
         <figure class="avatar">
           <Icons name="robot" class="avatar-icon" width="25px" height="25px" />
         </figure>
-        ✔️ 끝말잇기 시작! ✔️
+        ✅ 끝말잇기 시작! ✅
         <span></span>
       </div>
       {#each messages as { type, content, definition, loading }}
         {#if type === 'SEND'}
           <div class="message message-personal">
             {content}
+            <div class="message-definition">
+              {definition ? definition : ''}
+            </div>
           </div>
           {:else if type === 'RECEIVE'}
-          <div class="message" class:loading title={definition ? definition : ''}>
+          <div class="message" class:loading>
             <figure class="avatar">
               <Icons name="robot" class="avatar-icon" width="25px" height="25px" />
             </figure>
-            {content}
+            <div class="message-text">
+              {content}
+            </div>
+            <div class="message-definition">
+              {definition ? definition : ''}
+            </div>
             <span></span>
           </div>
         {/if}
@@ -134,7 +146,9 @@
     <div class="message-box">
       <input
         type="text"
+        on:click={() => { updateScroll(); }}
         placeholder="보내기..."
+        autocomplete="off"
         bind:value
       />
       <span use:Ripple={{ surface: true }}>
@@ -189,9 +203,17 @@
       .message {
         @include tablet {
           font-size: 20px;
+
+          .message-definition {
+            font-size: 16px !important;
+          }
         }
         @include desktop {
           font-size: 18px;
+        
+          .message-definition {
+            font-size: 14px !important;
+          }
         }
         position: relative;
         max-width: 310px;
@@ -209,6 +231,11 @@
         transform: scale(0);
         transform-origin: 0 0;
         animation: bounce 500ms linear both;
+        
+        .message-definition {
+          font-size: 11px;
+          text-align: left;
+        }
 
         &.message-personal {
           float: right;
@@ -314,6 +341,10 @@
     border-radius: 15px;
     background: $background-color-primary;
     color: $primary-color-default;
+
+    &:hover {
+      filter: brightness(95%);
+    }
     
     .restart-name {
       font-size: 17px;

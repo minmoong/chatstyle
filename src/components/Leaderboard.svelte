@@ -2,7 +2,7 @@
   import Icons from './Icons.svelte';
   import Ripple from '@smui/ripple';
   import getLeaderboard from 'src/functions/getLeaderboard';
-  import { onMount, onDestroy } from 'svelte';
+  import { onMount, onDestroy, afterUpdate } from 'svelte';
   import getRegion from 'src/functions/getRegion';
   import { mine, myCounter } from 'src/store';
   import registerRegion from 'src/functions/registerRegion';
@@ -11,12 +11,14 @@
   import commaFormat from 'src/util/commaFormat';
   import ClearBell from 'src/assets/audio/clear_bell.mp3';
 
-  let isOpen = true;
+  let isOpen = false;
   let leaderboard: Leaderboard[];
   let loading = true;
   let myregion: string;
   let addingCountScore = false;
   let addingMyCountScore = false;
+  
+  const url = 'https://5173-minmoong-endtoendworld-kvpcl8r3exn.ws-us62.gitpod.io';
 
   onMount(async () => {
     await registerRegion();
@@ -28,6 +30,7 @@
       region: myregion,
       scoreCount
     });
+
     loading = false;
 
     setInterval(updateLeaderboard, 4000);
@@ -53,6 +56,52 @@
     return leaderboard.filter(leaderboardData => leaderboardData.region === myregion)[0].score;
   }
 
+  async function share(type: string) {
+    switch (type) {
+      case 'twitter':
+        // 트위터
+        const sendText = '지역별 끝말잇기 점수 대결!';
+        window.open(`https://twitter.com/intent/tweet?text=${sendText}&url=${url}`);
+        break;
+      case 'facebook':
+        // 페북
+        window.open(`http://www.facebook.com/sharer/sharer.php?u=${url}`);
+        break;
+      case 'katalk':
+        // @ts-ignore
+        if (window.Kakao) {
+          // @ts-ignore
+          const kakao = window.Kakao;
+          if (!kakao.isInitialized()) {
+            kakao.init(import.meta.env.KAKAO_API);
+          }
+
+          kakao.Share.createDefaultButton({
+            container: '.share-katalk',
+            objectType: 'feed',
+            content: {
+              title: 'N2N 월드',
+              description: '지역별 끝말잇기 점수 대결!',
+              imageUrl:
+                'https://user-images.githubusercontent.com/62737839/185824297-ade773b3-8691-4b57-8e13-e32b5aff17f6.PNG',
+              link: {}
+            }
+          });
+        }
+        break;
+      case 'default':
+        await navigator.share({
+          title: 'end-to-end-world',
+          text: '지역별 끝말잇기 점수 대결!',
+          url
+        });
+        break;
+    
+      default:
+        break;
+    }
+  }
+
   const mineUnsubscribe = mine.subscribe(() => {
     addingCountScore = true;
     setTimeout(() => addingCountScore = false, 100);
@@ -67,13 +116,29 @@
       let audio = new Audio(ClearBell);
       audio.play();
     }
-  })
+  });
 </script>
 
 <div class="leaderboard" class:open={isOpen}>
   <div class="ad" hidden>
     광고입니다
   </div>
+  {#if !loading}
+    <div class="share">
+      <div class="share-twitter" on:click={() => share('twitter')}>
+        <Icons name="twitter" width="20" height="20" fill="#fff" />
+      </div>
+      <div class="share-facebook" on:click={() => share('facebook')}>
+        <Icons name="facebook" width="20" height="20" fill="#fff" />
+      </div>
+      <div class="share-katalk" on:click={() => share('katalk')}>
+        <Icons name="katalk" width="20" height="20" fill="#3c1e1d" />
+      </div>
+      <div class="webshare-btn" on:click={() => share('default')}>
+        <Icons name="share" width="20" height="20" fill="#fff" />
+      </div>
+    </div>
+  {/if}
   <div class="leaderboard-mine">
     {#if !loading}
       <div class="leaderboard-item">
@@ -105,13 +170,13 @@
           <img src="https://app.litt.ly/favicon.ico" alt="리틀리 아이콘" width="40px" height="40px" />
         </a>
         <a href="https://github.com/minmoong" target="_blank">
-          <Icons name="github" width="40px" height="40px" fill="#c0c0c0" />
+          <Icons name="github" width="40" height="40" fill="#c0c0c0" />
         </a>
       </div>
     {/if}
   </div>
   <span on:click={() => isOpen = !isOpen} use:Ripple={{ surface: true }}>
-    <Icons name="arrow-expand" width="40px" height="40px" fill="#c1c1c1" class="expand-icon" />
+    <Icons name="arrow-expand" width="40" height="40" fill="#c1c1c1" class="expand-icon" />
   </span>
 </div>
 
@@ -153,6 +218,45 @@
       height: 70px;
       border: 1px solid #000;
       margin: 0 auto;
+    }
+
+    .share {
+      @include flex-center;
+
+      .webshare-btn, .share-twitter, .share-facebook, .share-katalk {
+        @include flex-center;
+        cursor: pointer;
+        border-radius: 40px;
+        width: 40px;
+        height: 40px;
+        margin-right: 10px;
+      }
+
+      .webshare-btn {
+        background: $primary-color-default;
+        margin: 0;
+      }
+
+      .share-twitter {
+        background: #55acee;
+        :global(svg) {
+          position: relative;
+          left: 1px;
+        }
+      }
+
+      .share-facebook {
+        background: #3b5898;
+        :global(svg) {
+          position: relative;
+          left: -2px;
+        }
+      }
+      
+      .share-katalk {
+        background: #ffed00;
+
+      }
     }
 
     .leaderboard-mine {

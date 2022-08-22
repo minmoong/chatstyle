@@ -202,17 +202,17 @@
 
       .message {
         @include tablet {
-          font-size: 20px;
+          font-size: 22px;
 
           .message-definition {
-            font-size: 16px !important;
+            font-size: 18px !important;
           }
         }
         @include desktop {
-          font-size: 18px;
+          font-size: 20px;
         
           .message-definition {
-            font-size: 14px !important;
+            font-size: 16px !important;
           }
         }
         position: relative;
@@ -224,7 +224,7 @@
         border-radius: 0 10px 10px 10px;
         background: $background-color-primary;
         margin: 8px 0;
-        font-size: 15px;
+        font-size: 17px;
         line-height: 1.4;
         margin-left: 40px;
         color: $text-primary-color;
@@ -233,7 +233,7 @@
         animation: bounce 500ms linear both;
         
         .message-definition {
-          font-size: 11px;
+          font-size: 13px;
           text-align: left;
         }
 

@@ -18,7 +18,7 @@
   let addingCountScore = false;
   let addingMyCountScore = false;
   
-  const url = 'https://5173-minmoong-endtoendworld-kvpcl8r3exn.ws-us62.gitpod.io';
+  const url = 'https://end-to-end-world.vercel.app';
 
   onMount(async () => {
     await registerRegion();

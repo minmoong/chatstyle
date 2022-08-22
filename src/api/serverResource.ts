@@ -5,6 +5,7 @@ export interface APIResource {
     req: {};
     res: {
       existWord: boolean;
+      mean?: string;
     };
   };
   getNewWord: {

@@ -11,10 +11,11 @@ export const GET: RequestHandler = async ({ params }) => {
       rejectUnauthorized: false
     });
     const res = await axios.get(wordExistReqURL, { httpsAgent });
-    if (res.data.channel.item.length > 0) {
+    const items = res.data.channel.item;
+    if (items.length > 0) {
       return {
         status: 200,
-        body: { existWord: true }
+        body: { existWord: true, mean: items[0].sense[0].definition }
       };
     }
 

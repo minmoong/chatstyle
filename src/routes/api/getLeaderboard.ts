@@ -5,7 +5,13 @@ const prisma = new PrismaClient();
 
 export const GET: RequestHandler = async () => {
   try {
-    const leaderboard = (await prisma.regionScore.findMany()).map(board => {
+    const leaderboard = (await prisma.regionScore.findMany({
+      orderBy: [
+        {
+          score: 'desc'
+        }
+      ]
+    })).map(board => {
       return { region: board.region, score: Number(board.score) }
     });
     

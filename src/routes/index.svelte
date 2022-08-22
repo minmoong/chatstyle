@@ -1,13 +1,14 @@
-<!-- <script context="module" lang="ts">
+<script context="module" lang="ts">
   import type { Load } from '@sveltejs/kit';
+  import { myCounter } from 'src/store';
+  import { browser } from '$app/env';
 
-  export const load: Load = async ({ fetch }) => {
-
-    // return {
-    //   props: { region }
-    // };
+  export const load: Load = async () => {
+    if (browser) {
+      myCounter.set(localStorage.myCount ? +localStorage.myCount : 0);
+    }
   };
-</script> -->
+</script>
 
 <script lang="ts">
   import Chat from 'src/components/Chat.svelte';

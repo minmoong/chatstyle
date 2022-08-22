@@ -146,7 +146,7 @@
     <div class="message-box">
       <input
         type="text"
-        on:click={() => { updateScroll(); }}
+        on:click={() => { spreadScroll(1000); }}
         placeholder="보내기..."
         autocomplete="off"
         bind:value

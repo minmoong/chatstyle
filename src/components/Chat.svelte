@@ -35,7 +35,10 @@
     usedWords.update(usedWords => usedWords.concat(startWord));
     
     if (browser) {
-      window.addEventListener('resize', updateScroll);
+      window.addEventListener('resize', () => {
+        updateScroll();
+        console.log('asdf');
+      });
     }
   });
 

@@ -9,6 +9,7 @@
   import addScore from 'src/functions/addScore';
   import { get } from 'svelte/store';
   import Pling from 'src/assets/audio/pling.mp3';
+  import { browser } from '$app/env';
 
   type message = {
     id: string;
@@ -33,11 +34,9 @@
     changeMessages(true, receiveID, startWord, definition, false);
     usedWords.update(usedWords => usedWords.concat(startWord));
     
-    window.addEventListener('resize', updateScroll);
-  });
-
-  onDestroy(() => {
-    window.removeEventListener('resize', updateScroll);
+    if (browser) {
+      window.addEventListener('resize', updateScroll);
+    }
   });
 
   function updateScroll() {

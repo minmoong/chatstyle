@@ -1,4 +1,4 @@
-# end-to-end.world
+# end-to-end-world
+### 실시간 지역별 끝말잇기 점수 대결!
 
-### 개발 진행중인 웹앱; .env 파일이 존재하지 않아 오류가 발생할 수 있습니다.
-#### 진행 상황은 [Commits](https://github.com/minmoong/end-to-end-world/commits) 및 [Issues](https://github.com/minmoong/end-to-end-world/issues) 을 참고해 주시기 바랍니다.
+![캡처](https://user-images.githubusercontent.com/62737839/185855187-f6ffa28e-74eb-4a76-87d9-a4532ed85fbc.PNG)

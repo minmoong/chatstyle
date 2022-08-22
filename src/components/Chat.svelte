@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
+  import { onMount, onDestroy } from 'svelte';
   import { usedWords, myCounter } from 'src/store';
   import getNewWord from 'src/functions/getNewWord';
   import getStartWord from 'src/functions/getStartWord';
@@ -9,6 +9,7 @@
   import addScore from 'src/functions/addScore';
   import { get } from 'svelte/store';
   import Pling from 'src/assets/audio/pling.mp3';
+  import { browser } from '$app/env';
 
   type message = {
     id: string;
@@ -32,6 +33,10 @@
     sendWord = startWord;
     changeMessages(true, receiveID, startWord, definition, false);
     usedWords.update(usedWords => usedWords.concat(startWord));
+    
+    if (browser) {
+      window.addEventListener('resize', updateScroll);
+    }
   });
 
   function updateScroll() {
@@ -104,6 +109,7 @@
     changeMessages(true, receiveID, res.message as string, res.definition, false);
     spreadScroll(500);
   }
+
 </script>
 
 <form on:submit|preventDefault={onSubmit} class="chat">
@@ -146,7 +152,6 @@
     <div class="message-box">
       <input
         type="text"
-        on:click={() => { updateScroll(); }}
         placeholder="보내기..."
         autocomplete="off"
         bind:value

@@ -73,7 +73,7 @@
           // @ts-ignore
           const kakao = window.Kakao;
           if (!kakao.isInitialized()) {
-            kakao.init(import.meta.env.KAKAO_API);
+            kakao.init(import.meta.env.VITE_KAKAO_API);
           }
 
           kakao.Share.createDefaultButton({
@@ -83,7 +83,7 @@
               title: 'N2N 월드',
               description: '지역별 끝말잇기 점수 대결!',
               imageUrl:
-                'https://user-images.githubusercontent.com/62737839/185824297-ade773b3-8691-4b57-8e13-e32b5aff17f6.PNG',
+                'https://user-images.githubusercontent.com/62737839/185826141-ee514273-421c-4211-aac9-4c194b7a150a.PNG',
               link: {}
             }
           });
@@ -222,6 +222,7 @@
 
     .share {
       @include flex-center;
+      margin-bottom: 30px;
 
       .webshare-btn, .share-twitter, .share-facebook, .share-katalk {
         @include flex-center;
@@ -304,7 +305,7 @@
 
     .leaderboard-content {
       padding-left: 15px;
-      height: 100%;
+      height: 80%;
       overflow-y: scroll;
 
       .contact {

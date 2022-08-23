@@ -34,6 +34,21 @@
     loading = false;
 
     setInterval(updateLeaderboard, 4000);
+
+    let ins = document.createElement('ins');
+    let scr = document.createElement('script') as HTMLScriptElement;
+
+    ins.className = 'kakao_ad_area';
+    ins.setAttribute('style', 'display:none;');
+    scr.async = true;
+    scr.type = "text/javascript";
+    scr.src = "//t1.daumcdn.net/kas/static/ba.min.js";
+    ins.setAttribute('data-ad-width', '320');
+    ins.setAttribute('data-ad-height', '50');
+    ins.setAttribute('data-ad-unit', 'DAN-u0mypt63GhwsePqO');
+
+    (document.querySelector('.ad') as HTMLDivElement).appendChild(ins);
+    (document.querySelector('.ad') as HTMLDivElement).appendChild(scr);
   });
 
   onDestroy(() => {
@@ -146,11 +161,6 @@
     </div>
   {/if}
   <div class="ad">
-    <ins class="kakao_ad_area" style="display:none;" 
-    data-ad-unit    = "DAN-u0mypt63GhwsePqO" 
-    data-ad-width   = "320" 
-    data-ad-height  = "50"></ins>
-    <script type="text/javascript" src="//t1.daumcdn.net/kas/static/ba.min.js" async></script>
   </div>
   <div class="leaderboard-mine">
     {#if !loading}

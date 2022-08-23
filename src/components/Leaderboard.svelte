@@ -207,27 +207,9 @@
   .leaderboard {
     display: flex;
     flex-direction: column;
-    @include mobile {
-      $leaderboard-height: 560px;
-      top: $leaderboard-height * -1 + 50px;
-      height: $leaderboard-height;
-    }
-
-    @include tablet {
-      $leaderboard-height: 600px;
-      top: $leaderboard-height * -1 + 50px;
-      height: $leaderboard-height;
-    }
-
-    @include desktop {
-      $leaderboard-height: 650px;
-      top: $leaderboard-height * -1 + 50px;
-      height: $leaderboard-height;
-    }
-
-    $leaderboard-height: 560px;
+    $leaderboard-height: 85%;
     position: absolute;
-    top: $leaderboard-height * -1 + 50px;
+    top: calc($leaderboard-height * -1 + 50px);
     z-index: 2;
     width: 100%;
     height: $leaderboard-height;

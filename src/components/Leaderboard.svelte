@@ -129,9 +129,6 @@
 </script>
 
 <div class="leaderboard" class:open={isOpen}>
-  <div class="ad" hidden>
-    광고입니다
-  </div>
   {#if !loading}
     <div class="share">
       <div class="share-twitter" on:click={() => share('twitter')}>
@@ -148,6 +145,13 @@
       </div>
     </div>
   {/if}
+  <div class="ad">
+    <ins class="kakao_ad_area" style="display:none;" 
+    data-ad-unit    = "DAN-u0mypt63GhwsePqO" 
+    data-ad-width   = "320" 
+    data-ad-height  = "50"></ins>
+    <script type="text/javascript" src="//t1.daumcdn.net/kas/static/ba.min.js" async></script>
+  </div>
   <div class="leaderboard-mine">
     {#if !loading}
       <div class="leaderboard-item">
@@ -191,6 +195,8 @@
 
 <style lang="scss">
   .leaderboard {
+    display: flex;
+    flex-direction: column;
     @include mobile {
       $leaderboard-height: 560px;
       top: $leaderboard-height * -1 + 50px;
@@ -223,10 +229,10 @@
     color: $text-primary-color;
 
     .ad {
-      width: 95%;
-      height: 70px;
-      border: 1px solid #000;
-      margin: 0 auto;
+      width: fit-content;
+      height: fit-content;
+      flex: 1 0 auto;
+      margin: 0 auto 30px;
     }
 
     .share {
@@ -292,6 +298,7 @@
 
         .item-region, .item-score {
           line-height: 50px;
+          font-weight: bold;
         }
 
         .item-region {
@@ -314,7 +321,6 @@
 
     .leaderboard-content {
       padding-left: 15px;
-      height: 80%;
       overflow-y: scroll;
 
       .contact {

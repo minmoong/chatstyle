@@ -28,6 +28,13 @@ async function getNewWord(endWord: string, word: string, changeMessages: any, se
     };
   }
 
+  if (word === '이리듐') {
+    return {
+      success: false,
+      message: '금지된 단어입니다. 😅: 이리듐'
+    };
+  }
+
   const { existWord, mean } = await api<'isExistWord'>('GET', `/api/isExistWord/${word}`);
   if (!existWord) {
     return {

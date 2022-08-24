@@ -36,19 +36,29 @@
     setInterval(updateLeaderboard, 4000);
 
     let ins = document.createElement('ins');
-    let scr = document.createElement('script') as HTMLScriptElement;
+    let ins2 = document.createElement('ins');
 
     ins.className = 'kakao_ad_area';
     ins.setAttribute('style', 'display:none;');
+    ins.setAttribute('data-ad-width', '320');
+    ins.setAttribute('data-ad-height', '100');
+    ins.setAttribute('data-ad-unit', 'DAN-Gajyt3mAU8UaQfpi');
+
+    ins2.className = 'kakao_ad_area';
+    ins2.setAttribute('style', 'display:none;');
+    ins2.setAttribute('data-ad-width', '320');
+    ins2.setAttribute('data-ad-height', '100');
+    ins2.setAttribute('data-ad-unit', 'DAN-7Q1Ruo9fvk2riY7X');
+
+    let scr = document.createElement('script') as HTMLScriptElement;
     scr.async = true;
     scr.type = "text/javascript";
     scr.src = "//t1.daumcdn.net/kas/static/ba.min.js";
-    ins.setAttribute('data-ad-width', '320');
-    ins.setAttribute('data-ad-height', '50');
-    ins.setAttribute('data-ad-unit', 'DAN-u0mypt63GhwsePqO');
 
     (document.querySelector('.ad') as HTMLDivElement).appendChild(ins);
     (document.querySelector('.ad') as HTMLDivElement).appendChild(scr);
+    (document.querySelector('.content-ad') as HTMLDivElement).appendChild(ins2);
+    (document.querySelector('.content-ad') as HTMLDivElement).appendChild(scr);
   });
 
   onDestroy(() => {
@@ -160,8 +170,7 @@
       </div>
     </div>
   {/if}
-  <div class="ad">
-  </div>
+  <div class="ad"></div>
   <div class="leaderboard-mine">
     {#if !loading}
       <div class="leaderboard-item">
@@ -174,19 +183,20 @@
     {/if}
   </div>
   <div class="leaderboard-content">
-    <div class="leaderboard-ranking">
-      {#if !loading}
-        {#each leaderboard as { region, score }, number}
-          <div class="leaderboard-item">
-            <div class="item-number">{number + 1}</div>
-            <div class="item-region" class:myregion={region === myregion}>{region}</div>
-            <div class="item-score">{commaFormat(score)}점</div>
-          </div>
-        {/each}
-        {:else}
-          <div class="loading">로딩 중...</div>
-      {/if}
-    </div>
+    {#if !loading}
+      <div class="leaderboard-ranking">
+          {#each leaderboard as { region, score }, number}
+            <div class="leaderboard-item">
+              <div class="item-number">{number + 1}</div>
+              <div class="item-region" class:myregion={region === myregion}>{region}</div>
+              <div class="item-score">{commaFormat(score)}점</div>
+            </div>
+          {/each}
+      </div>
+      {:else}
+        <div class="loading">로딩 중...</div>
+    {/if}
+    <div class="content-ad"></div>
     {#if !loading}
       <div class="contact">
         <a href="https://litt.ly/backnforth" target="_blank">
@@ -207,7 +217,7 @@
   .leaderboard {
     display: flex;
     flex-direction: column;
-    $leaderboard-height: 85%;
+    $leaderboard-height: 100%;
     position: absolute;
     top: calc($leaderboard-height * -1 + 50px);
     z-index: 2;
@@ -328,7 +338,7 @@
       }
 
       .leaderboard-ranking {
-        margin-bottom: 50px;
+        margin-bottom: 30px;
         .leaderboard-item {
           padding: 0.5rem 0;
           display: flex;
@@ -384,6 +394,10 @@
             margin-right: 15px;
           }
         }
+      }
+
+      .content-ad {
+        margin-bottom: 30px;
       }
     }
 

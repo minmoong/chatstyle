@@ -226,7 +226,7 @@
     border-bottom: 1px solid #ccc;
     background: $background-color-primary;
     border-radius: 0 0 20px 20px;
-    transition: 0.4s;
+    transition: 0.3s;
     padding: 15px 0 50px;
     color: $text-primary-color;
 
@@ -397,7 +397,9 @@
       }
 
       .content-ad {
-        margin-bottom: 30px;
+        width: fit-content;
+        height: fit-content;
+        margin: 0 auto 30px;
       }
     }
 

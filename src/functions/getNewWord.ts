@@ -40,7 +40,7 @@ async function getNewWord(endWord: string, word: string, changeMessages: any, se
   await addScore(word.length * 10 + 1);
   mine.set({
     region: await getRegion(),
-    scoreCount: get(mine).scoreCount + word.length
+    scoreCount: get(mine).scoreCount + (word.length * 10 + 1)
   });
   myCounter.set(get(myCounter) + word.length);
 

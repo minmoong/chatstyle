@@ -1,7 +1,7 @@
 import type { RequestHandler } from '@sveltejs/kit';
 import https from 'https';
 import axios from 'axios';
-import replaceSpecials from 'src/util/replaceSpecials';
+import { replaceSpecials } from 'src/util';
 
 export const GET: RequestHandler = async () => {
   try {

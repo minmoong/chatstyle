@@ -1,5 +1,5 @@
 import { api } from 'src/api';
-import getRegion from 'src/functions/getRegion';
+import { getRegion } from 'src/functions';
 
 async function registerRegion() {
   const region = await getRegion();

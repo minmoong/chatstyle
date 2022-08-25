@@ -1,10 +1,8 @@
 import { api } from 'src/api';
-import replaceSpecials from 'src/util/replaceSpecials';
-import dueum from 'src/util/dueum';
+import { replaceSpecials, dueum } from 'src/util';
 import { usedWords, mine, myCounter } from 'src/store';
 import { get } from 'svelte/store';
-import addScore from 'src/functions/addScore';
-import getRegion from 'src/functions/getRegion';
+import { addScore, getRegion } from 'src/functions';
 
 async function getNewWord(endWord: string, word: string, changeMessages: any, sendID: string) {
   if (word[0] !== endWord[endWord.length - 1] && word[0] !== dueum(endWord[endWord.length - 1])) {
@@ -28,7 +26,7 @@ async function getNewWord(endWord: string, word: string, changeMessages: any, se
     };
   }
 
-  const { existWord, mean } = await api<'isExistWord'>('GET', `/api/isExistWord/${word}`);
+  const { existWord, mean } = await api<'isExistWord'>('POST', '/api/isExistWord', { word });
   if (!existWord) {
     return {
       success: false,

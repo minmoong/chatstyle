@@ -1,15 +1,13 @@
 <script lang="ts">
   import Icons from './Icons.svelte';
   import Ripple from '@smui/ripple';
-  import getLeaderboard from 'src/functions/getLeaderboard';
-  import { onMount, onDestroy, afterUpdate } from 'svelte';
-  import getRegion from 'src/functions/getRegion';
+  import { getLeaderboard, getRegion, registerRegion } from 'src/functions';
+  import { onMount, onDestroy } from 'svelte';
   import { mine, myCounter } from 'src/store';
-  import registerRegion from 'src/functions/registerRegion';
   import { get } from 'svelte/store';
   import { browser } from '$app/env';
-  import commaFormat from 'src/util/commaFormat';
-  import ClearBell from 'src/assets/audio/clear_bell.mp3';
+  import { commaFormat } from 'src/util';
+  import { clear_bell_MP3 } from 'src/assets/audio';
 
   let isOpen = false;
   let leaderboard: Leaderboard[];
@@ -140,7 +138,7 @@
     if (browser) {
       localStorage.myCount = count;
 
-      let promise = (new Audio(ClearBell)).play();
+      let promise = (new Audio(clear_bell_MP3)).play();
       if (promise !== undefined) {
         promise.then(_ => {
           // Autoplay started!
@@ -273,7 +271,6 @@
       
       .share-katalk {
         background: #ffed00;
-
       }
     }
 
@@ -308,7 +305,7 @@
         }
 
         .item-counter {
-          font-size: 30px;
+          font-size: 25px;
           font-weight: 900;
           color: $primary-color-default;
 	        transition: transform 100ms ease-in-out;
@@ -351,7 +348,7 @@
             .item-number {
               color: transparent;
               background: url('/src/assets/image/first.png') no-repeat center center;
-              background-size: 19px;
+              background-size: 22px;
             }
           }
 
@@ -359,7 +356,7 @@
             .item-number {
               color: transparent;
               background: url('/src/assets/image/second.png') no-repeat center center;
-              background-size: 19px;
+              background-size: 22px;
             }
           }
 
@@ -367,7 +364,7 @@
             .item-number {
               color: transparent;
               background: url('/src/assets/image/third.png') no-repeat center center;
-              background-size: 19px;
+              background-size: 22px;
             }
           }
 
@@ -377,6 +374,7 @@
 
           .item-number {
             min-width: 25px;
+            height: 100%;
             margin-right: 8px;
             text-align: center;
           }

@@ -5,7 +5,7 @@ const prisma = new PrismaClient();
 
 export const POST: RequestHandler = async ({ request }) => {
   try {
-    const { region, increasementScore } = await request.json();
+    const { region, increasement } = await request.json();
 
     const score = (await prisma.regionScore.findMany({
       select: { score: true },
@@ -17,7 +17,7 @@ export const POST: RequestHandler = async ({ request }) => {
         region
       },
       data: {
-        score: Number(score) + increasementScore
+        score: Number(score) + increasement
       }
     });
 

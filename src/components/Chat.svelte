@@ -1,14 +1,12 @@
 <script lang="ts">
-  import { onMount, onDestroy } from 'svelte';
+  import { onMount } from 'svelte';
   import { usedWords, myCounter } from 'src/store';
-  import getNewWord from 'src/functions/getNewWord';
-  import getStartWord from 'src/functions/getStartWord';
+  import { getNewWord, getStartWord, addScore } from 'src/functions';
   import Ripple from '@smui/ripple';
   import Icons from './Icons.svelte';
   import Leaderboard from './Leaderboard.svelte';
-  import addScore from 'src/functions/addScore';
   import { get } from 'svelte/store';
-  import Pling from 'src/assets/audio/pling.mp3';
+  import { pling_MP3 } from 'src/assets/audio';
   import { browser } from '$app/env';
 
   type message = {
@@ -54,7 +52,7 @@
     });
 
     if (isReceive) {
-      let promise = (new Audio(Pling)).play();
+      let promise = (new Audio(pling_MP3)).play();
       if (promise !== undefined) {
         promise.then(_ => {
           // Autoplay started!

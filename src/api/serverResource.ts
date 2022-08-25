@@ -1,8 +1,10 @@
 export interface APIResource {
   isExistWord: {
-    method: 'GET';
+    method: 'POST';
     endpoint: string;
-    req: {};
+    req: {
+      word: string;
+    };
     res: {
       existWord: boolean;
       mean?: string;
@@ -36,7 +38,7 @@ export interface APIResource {
     endpoint: string;
     req: {
       region: string;
-      increasementScore: number;
+      increasement: number;
     };
     res: {};
   };

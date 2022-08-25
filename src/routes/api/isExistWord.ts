@@ -2,9 +2,9 @@ import type { RequestHandler } from '@sveltejs/kit';
 import https from 'https';
 import axios from 'axios';
 
-export const GET: RequestHandler = async ({ params }) => {
+export const POST: RequestHandler = async ({ request }) => {
   try {
-    const { word } = params;
+    const { word } = await request.json();
     const DICTAPI_TOKEN = import.meta.env.VITE_DICTAPI_TOKEN;
     const wordExistReqURL = `https://opendict.korean.go.kr/api/search?key=${DICTAPI_TOKEN}&req_type=json&q=${encodeURI(word)}&advanced=y&method=exact&type1=word`;
     const httpsAgent = new https.Agent({

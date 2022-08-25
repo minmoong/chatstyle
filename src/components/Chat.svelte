@@ -225,12 +225,12 @@
         float: left;
         padding: 6px 10px 7px;
         border-radius: 0 10px 10px 10px;
-        background: $background-color-primary;
+        background: $color-background;
         margin: 8px 0;
         font-size: 17px;
         line-height: 1.4;
         margin-left: 40px;
-        color: $text-primary-color;
+        color: $color-text;
         transform: scale(0);
         transform-origin: 0 0;
         animation: bounce 500ms linear both;
@@ -244,8 +244,8 @@
           float: right;
           text-align: right;
           border-radius: 10px 10px 0 10px;
-          background: $primary-color-default;
-          color: $text-color-white;
+          background: $color-default;
+          color: $color-text-white;
           margin: 2px 0;
         }
 
@@ -286,7 +286,7 @@
           width: 35px;
           height: 35px;
           border-radius: 50%;
-          border: 1px solid $primary-color-default;
+          border: 1px solid $color-default;
         }
       }
     }
@@ -312,7 +312,7 @@
       font-size: 15px;
       height: 24px;
       width: 85%;
-      color: $text-primary-color;
+      color: $color-text;
     }
 
     span {
@@ -342,8 +342,8 @@
     height: 100%;
     text-align: center;
     border-radius: 15px;
-    background: $background-color-primary;
-    color: $primary-color-default;
+    background: $color-background;
+    color: $color-default;
 
     &:hover {
       filter: brightness(95%);

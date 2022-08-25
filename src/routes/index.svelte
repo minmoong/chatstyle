@@ -12,6 +12,8 @@
 
 <script lang="ts">
   import Chat from 'src/components/Chat.svelte';
+  import Help from 'src/components/Help.svelte';
 </script>
 
+<Help />
 <Chat />

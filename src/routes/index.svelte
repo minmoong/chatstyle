@@ -5,7 +5,7 @@
 
   export const load: Load = async () => {
     if (browser) {
-      myCounter.set(localStorage.myCount ? +localStorage.myCount : 0);
+      myCounter.set({ score: localStorage.myCount ? +localStorage.myCount : 0, increasement: 0 });
     }
   };
 </script>

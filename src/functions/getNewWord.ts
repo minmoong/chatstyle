@@ -37,12 +37,13 @@ async function getNewWord(endWord: string, word: string, changeMessages: any, se
   changeMessages(false, sendID, word, mean);
   
   usedWords.update(usedWords => usedWords.concat(word));
-  await addScore(word.length * 10 + 1);
+  let randScore = Math.floor((Math.random() * (word.length * 500 - 1) + 1));
+  await addScore(randScore);
   mine.set({
     region: await getRegion(),
-    scoreCount: get(mine).scoreCount + (word.length * 10 + 1)
+    scoreCount: get(mine).scoreCount + randScore
   });
-  myCounter.set(get(myCounter) + word.length);
+  myCounter.set({ score: get(myCounter).score + randScore, increasement: randScore });
 
   let { found, newWord, definition, messages } = await api<'getNewWord'>('POST', `/api/getNewWord`, {
     endWith: word[word.length - 1],
@@ -55,7 +56,8 @@ async function getNewWord(endWord: string, word: string, changeMessages: any, se
       success: true,
       message: newWord,
       definition,
-      mean
+      mean,
+      randScore
     };
   }
 

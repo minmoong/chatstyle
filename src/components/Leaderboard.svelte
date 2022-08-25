@@ -15,6 +15,7 @@
   let myregion: string;
   let addingCountScore = false;
   let addingMyCountScore = false;
+  let increasementCounter: number = 0;
   
   const url = 'https://end-to-end-world.vercel.app';
 
@@ -136,7 +137,8 @@
     addingMyCountScore = true;
     setTimeout(() => addingMyCountScore = false, 100);
     if (browser) {
-      localStorage.myCount = count;
+      localStorage.myCount = count.score;
+      increasementCounter = count.increasement;
 
       let promise = (new Audio(clear_bell_MP3)).play();
       if (promise !== undefined) {
@@ -173,7 +175,10 @@
     {#if !loading}
       <div class="leaderboard-item">
         <div class="item-region">{$mine.region}</div>
-        <div class="item-counter" class:addingMyCountScore>{commaFormat($myCounter)}</div>
+        <div class="item-counter" class:addingMyCountScore>
+          <div class="my-counter">{commaFormat($myCounter.score)}</div>
+          <div class="increasement-counter">+{increasementCounter}</div>
+        </div>
         <div class="item-score" class:addingCountScore>{commaFormat($mine.scoreCount)}점</div>
       </div>
       {:else}
@@ -305,10 +310,19 @@
         }
 
         .item-counter {
-          font-size: 25px;
-          font-weight: 900;
-          color: $color-default;
+          text-align: center;
 	        transition: transform 100ms ease-in-out;
+
+          .my-counter {
+            font-size: 24px;
+            font-weight: 900;
+            color: $color-default;
+          }
+
+          .increasement-counter {
+            font-size: 17px;
+            color: $color-default;
+          }
         }
 
         .item-score {

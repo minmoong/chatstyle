@@ -100,7 +100,7 @@
       changeMessages(true, receiveID, (res.messages as string[])[0], undefined, false);
       receiveMsg((res.messages as string[])[1], 'END');
       addScore(1000);
-      myCounter.set(get(myCounter) + 1000);
+      myCounter.set({ score: get(myCounter).score + 1000, increasement: 1000 });
       isEnded = true;
       return;
     }

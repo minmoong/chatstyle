@@ -22,7 +22,7 @@
 			<div class="body">
 				<div class="title">플레이 방법 😎</div>
 				<div class="desc">
-          1. 로봇의 단어를 이은 <span class="highlight">단어 글자 수 × 10 + 1</span> 만큼 점수가 증가합니다. <br />
+          1. 로봇의 단어를 이은 <span class="highlight">단어 길이에 비례한 랜덤 점수</span> 만큼 증가합니다. <br />
           2. 만약 로봇을 이겼을 경우 <span class="highlight">1,000점</span>이 주어집니다!
 				</div>
 				<div class="checkbox">

@@ -37,7 +37,7 @@ async function getNewWord(endWord: string, word: string, changeMessages: any, se
   changeMessages(false, sendID, word, mean);
   
   usedWords.update(usedWords => usedWords.concat(word));
-  await addScore(word.length * 10);
+  await addScore(word.length * 10 + 1);
   mine.set({
     region: await getRegion(),
     scoreCount: get(mine).scoreCount + word.length

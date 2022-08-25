@@ -222,11 +222,11 @@
     width: 100%;
     height: $leaderboard-height;
     border-bottom: 1px solid #ccc;
-    background: $background-color-primary;
+    background: $color-background;
     border-radius: 0 0 20px 20px;
     transition: 0.3s;
     padding: 15px 0 50px;
-    color: $text-primary-color;
+    color: $color-text;
 
     .ad {
       width: fit-content;
@@ -249,7 +249,7 @@
       }
 
       .webshare-btn {
-        background: $primary-color-default;
+        background: $color-default;
         margin: 0;
       }
 
@@ -307,7 +307,7 @@
         .item-counter {
           font-size: 25px;
           font-weight: 900;
-          color: $primary-color-default;
+          color: $color-default;
 	        transition: transform 100ms ease-in-out;
         }
 

@@ -12,7 +12,7 @@ export const GET: RequestHandler = async () => {
         }
       ]
     })).map(board => {
-      return { region: board.region, score: Number(board.score) }
+      return { region: board.region, score: Number(board.score), moving: board.moving }
     });
     
     return {

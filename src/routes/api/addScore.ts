@@ -17,9 +17,21 @@ export const POST: RequestHandler = async ({ request }) => {
         region
       },
       data: {
-        score: Number(score) + increasement
+        score: Number(score) + increasement,
+        moving: true
       }
     });
+
+    setTimeout(async () => {
+      await prisma.regionScore.update({
+        where: {
+          region
+        },
+        data: {
+          moving: false
+        }
+      });
+    }, 90000);
 
     return {
       status: 200

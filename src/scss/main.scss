@@ -62,6 +62,12 @@ $desktop: 1024px;
   }
 }
 
+@keyframes blink-effect {
+  50% {
+    opacity: 0;
+  }
+}
+
 @mixin center {
   position: absolute;
   top: 50%;

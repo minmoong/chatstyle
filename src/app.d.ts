@@ -11,4 +11,4 @@ declare namespace App {
 }
 
 type Fetch = (info: RequestInfo, init?: RequestInit | undefined) => Promise<Response>;
-type Leaderboard = { region: string; score: number; }
+type Leaderboard = { region: string; score: number; moving: boolean; };

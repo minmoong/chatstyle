@@ -188,11 +188,20 @@
   <div class="leaderboard-content">
     {#if !loading}
       <div class="leaderboard-ranking">
-          {#each leaderboard as { region, score }, number}
+          {#each leaderboard as { region, score, moving }, number}
             <div class="leaderboard-item">
               <div class="item-number">{number + 1}</div>
               <div class="item-region" class:myregion={region === myregion}>{region}</div>
-              <div class="item-score">{commaFormat(score)}점</div>
+              <div class="item-score">
+                <div class="moving">
+                  {#if moving}
+                    <Icons name="moving" width="23px" height="23px" />
+                  {/if}
+                </div>
+                <div class="score-number">
+                  {commaFormat(score)}점
+                </div>
+              </div>
             </div>
           {/each}
       </div>
@@ -353,7 +362,7 @@
         .leaderboard-item {
           padding: 0.5rem 0;
           display: flex;
-          height: 40px;
+          height: 50px;
           flex-direction: row;
           border-bottom: 1px solid #d1d1d1;
           align-items: center;
@@ -404,6 +413,19 @@
           .item-score {
             margin-left: auto;
             margin-right: 15px;
+            display: flex;
+
+            .score-number {
+              line-height: 50px;
+              margin-left: 15px;
+            }
+
+            .moving {
+              animation: blink-effect 1.5s ease-in-out infinite alternate;
+              line-height: 50px;
+              display: flex;
+              align-items: center;
+            }
           }
         }
       }

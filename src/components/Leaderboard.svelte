@@ -362,7 +362,7 @@
         .leaderboard-item {
           padding: 0.5rem 0;
           display: flex;
-          height: 50px;
+          height: 45px;
           flex-direction: row;
           border-bottom: 1px solid #d1d1d1;
           align-items: center;
@@ -416,13 +416,13 @@
             display: flex;
 
             .score-number {
-              line-height: 50px;
+              line-height: 45px;
               margin-left: 15px;
             }
 
             .moving {
               animation: blink-effect 1.5s ease-in-out infinite alternate;
-              line-height: 50px;
+              line-height: 45px;
               display: flex;
               align-items: center;
             }

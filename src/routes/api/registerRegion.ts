@@ -15,7 +15,8 @@ export const POST: RequestHandler = async ({ request }) => {
       await prisma.regionScore.create({
         data: {
           region,
-          score: 0
+          score: 0,
+          moving: false
         }
       });
     }

@@ -12,7 +12,6 @@ export const POST: RequestHandler = async ({ request }) => {
       where: { region }
     }))[0];
     const score = regionItem.score;
-    const moving = regionItem.moving;
     
     await prisma.regionScore.update({
       where: {
@@ -24,18 +23,16 @@ export const POST: RequestHandler = async ({ request }) => {
       }
     });
 
-    if (!moving) {
-      setTimeout(async () => {
-        await prisma.regionScore.update({
-          where: {
-            region
-          },
-          data: {
-            moving: false
-          }
-        });
-      }, 90000);
-    }
+    setTimeout(async () => {
+      await prisma.regionScore.update({
+        where: {
+          region
+        },
+        data: {
+          moving: false
+        }
+      });
+    }, 60000);
 
     return {
       status: 200

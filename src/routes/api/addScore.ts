@@ -12,7 +12,6 @@ export const POST: RequestHandler = async ({ request }) => {
       where: { region }
     }))[0];
     const score = regionItem.score;
-    const moving = regionItem.moving;
     
     await prisma.regionScore.update({
       where: {
@@ -33,7 +32,7 @@ export const POST: RequestHandler = async ({ request }) => {
           moving: false
         }
       });
-    }, 30000);
+    }, 20000);
 
     return {
       status: 200

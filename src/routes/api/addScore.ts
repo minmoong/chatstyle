@@ -33,7 +33,7 @@ export const POST: RequestHandler = async ({ request }) => {
           moving: false
         }
       });
-    }, 10000);
+    }, 30000);
 
     return {
       status: 200

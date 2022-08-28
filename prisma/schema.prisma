@@ -11,5 +11,4 @@ generator client {
 model RegionScore {
   region String @id
   score BigInt @default(0)
-  moving Boolean @default(false)
 }

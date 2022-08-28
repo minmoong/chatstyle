@@ -32,7 +32,7 @@
 
     loading = false;
 
-    setInterval(updateLeaderboard, 2000);
+    setInterval(updateLeaderboard, 7000);
 
     let ins = document.createElement('ins');
     let ins2 = document.createElement('ins');
@@ -66,7 +66,18 @@
   });
 
   async function updateLeaderboard() {
-    leaderboard = await getLeaderboard();
+    const newLeaderboard = await getLeaderboard();
+    leaderboard = leaderboard.map((l, i) => {
+      if (l.score !== newLeaderboard[i].score) {
+        return {
+          region: newLeaderboard[i].region,
+          score: newLeaderboard[i].score,
+          moving: true
+        }
+      }
+
+      return newLeaderboard[i];
+    });
     let scoreCount = getScoreCount(leaderboard);
     if (get(mine).scoreCount !== scoreCount) {
       mine.set({

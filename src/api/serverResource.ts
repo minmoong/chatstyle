@@ -58,12 +58,4 @@ export interface APIResource {
     };
     res: {};
   }
-  notMoving: {
-    method: 'POST';
-    endpoint: string;
-    req: {
-      region: string;
-    };
-    res: {};
-  }
 }

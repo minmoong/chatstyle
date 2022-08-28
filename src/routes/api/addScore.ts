@@ -8,7 +8,7 @@ export const POST: RequestHandler = async ({ request }) => {
     const { region, increasement } = await request.json();
 
     const regionItem = (await prisma.regionScore.findMany({
-      select: { score: true, moving: true },
+      select: { score: true },
       where: { region }
     }))[0];
     const score = regionItem.score;
@@ -18,21 +18,9 @@ export const POST: RequestHandler = async ({ request }) => {
         region
       },
       data: {
-        score: Number(score) + increasement,
-        moving: true
+        score: Number(score) + increasement
       }
     });
-
-    setTimeout(async () => { // TODO: 새로고침시 이 콜백은 사라짐
-      await prisma.regionScore.update({
-        where: {
-          region
-        },
-        data: {
-          moving: false
-        }
-      });
-    }, 20000);
 
     return {
       status: 200

@@ -24,19 +24,16 @@ export const POST: RequestHandler = async ({ request }) => {
       }
     });
 
-    if (!moving) {
-      setTimeout(async () => {
-        await prisma.regionScore.update({
-          where: {
-            region
-          },
-          data: {
-            moving: false
-          }
-        });
-        console.log('not moving');
-      }, 30000);
-    }
+    setTimeout(async () => { // TODO: 새로고침시 이 콜백은 사라짐
+      await prisma.regionScore.update({
+        where: {
+          region
+        },
+        data: {
+          moving: false
+        }
+      });
+    }, 10000);
 
     return {
       status: 200

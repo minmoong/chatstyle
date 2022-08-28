@@ -32,7 +32,7 @@
 
     loading = false;
 
-    setInterval(updateLeaderboard, 4000);
+    setInterval(updateLeaderboard, 2000);
 
     let ins = document.createElement('ins');
     let ins2 = document.createElement('ins');
